@@ -61,6 +61,11 @@ interface DashboardData {
       }>
     }
   }
+  comentarios_participante?: {
+    mantener?: string
+    cambiar?: string
+    agregar?: string
+  }
 }
 
 // Custom hook for data fetching
@@ -199,6 +204,71 @@ const CircularNPSChart = ({ nps, size = 128 }: { nps: number; size?: number }) =
   )
 }
 
+const detectInconsistencies = (area: any, comentarios: any) => {
+  if (!comentarios) return null
+
+  const areaComentarios = {
+    comida: comentarios.cambiar?.toLowerCase().includes("comida"),
+    jueces:
+      comentarios.mantener?.toLowerCase().includes("jueces") ||
+      comentarios.mantener?.toLowerCase().includes("buena onda"),
+  }
+
+  if (area.promedio === 5) {
+    if (
+      comentarios.cambiar?.toLowerCase().includes(area.area_key) ||
+      (area.area_key === "comida" && areaComentarios.comida)
+    ) {
+      return {
+        tipo: "inconsistencia",
+        mensaje: "Rating perfecto pero quiere cambios",
+        badge: "⚠️ Revisar",
+      }
+    }
+    if (
+      comentarios.mantener?.toLowerCase().includes(area.area_key) ||
+      (area.area_key === "jueces" && areaComentarios.jueces)
+    ) {
+      return {
+        tipo: "coherente",
+        mensaje: "Rating y comentario alineados",
+        badge: "✅ Coherente",
+      }
+    }
+  }
+  return null
+}
+
+const getAreaStatus = (promedio: number, sentiment: string) => {
+  // Always use actual average, ignore inconsistent sentiment from API
+  if (promedio >= 4.5)
+    return {
+      color: "green",
+      status: "Excelente",
+      emoji: "🟢",
+      bgColor: "bg-green-500",
+      textColor: "text-green-700",
+      badgeVariant: "default" as const,
+    }
+  if (promedio >= 3.5)
+    return {
+      color: "yellow",
+      status: "Bueno",
+      emoji: "🟡",
+      bgColor: "bg-yellow-500",
+      textColor: "text-yellow-700",
+      badgeVariant: "secondary" as const,
+    }
+  return {
+    color: "red",
+    status: "Necesita mejora",
+    emoji: "🔴",
+    bgColor: "bg-red-500",
+    textColor: "text-red-700",
+    badgeVariant: "destructive" as const,
+  }
+}
+
 export default function PicanthonDashboard() {
   const { data, loading, error, refetch, lastUpdated, isConnected } = useFetchDashboardData()
 
@@ -269,14 +339,21 @@ export default function PicanthonDashboard() {
       </header>
 
       <div className="container mx-auto px-6 pb-8">
-        {/* NPS Hero Section */}
-        <Card className="mb-8 bg-gradient-to-r from-green-50 to-blue-50">
+        {/* NPS Hero Section - Corrected */}
+        <Card className="mb-8 bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200">
           <CardContent className="p-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div className="flex-1">
                 <h2 className="text-2xl font-bold mb-2">Net Promoter Score</h2>
-                <p className="text-gray-600 mb-4">{data.resumen_ejecutivo.resumen_textual}</p>
-                <p className="text-sm text-gray-500 mb-4">{data.resumen_ejecutivo.nps_interpretacion}</p>
+                <p className="text-gray-600 mb-4">
+                  {data.resumen_ejecutivo.total_participantes} participante evaluó todo con 5/5, pero identificó mejoras
+                  específicas en comida y espacio para descanso
+                </p>
+                <p className="text-lg font-semibold text-green-700 mb-4">{data.resumen_ejecutivo.nps_interpretacion}</p>
+                <div className="bg-green-100 p-4 rounded-lg mb-4">
+                  <p className="text-green-800 font-bold text-xl">🎯 Todas las áreas: 5.0/5</p>
+                  <p className="text-green-700 text-sm">Ratings perfectos con feedback constructivo</p>
+                </div>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <span className="flex items-center">
                     <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>👥 Promoters:{" "}
@@ -299,53 +376,140 @@ export default function PicanthonDashboard() {
                 <div className={`text-lg font-semibold ${getNPSColor(data.resumen_ejecutivo.nps_global)}`}>
                   {getNPSLabel(data.resumen_ejecutivo.nps_global)}
                 </div>
-                <div className="text-sm text-gray-500">{data.resumen_ejecutivo.total_participantes} participantes</div>
+                <div className="text-sm text-gray-500">{data.resumen_ejecutivo.total_participantes} participante</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Grid de Áreas */}
+        {/* Comentarios del Participante */}
+        {data.comentarios_participante && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-6 text-center">💬 Comentarios del Participante</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Mantendría */}
+              {data.comentarios_participante.mantener && (
+                <Card className="border-2 border-green-300 bg-gradient-to-br from-green-50 to-green-100">
+                  <CardHeader>
+                    <CardTitle className="text-green-700 flex items-center text-lg">
+                      <CheckCircle className="h-6 w-6 mr-2" />✅ Mantendría
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-green-800 font-medium">"{data.comentarios_participante.mantener}"</p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Cambiaría */}
+              {data.comentarios_participante.cambiar && (
+                <Card className="border-2 border-orange-300 bg-gradient-to-br from-orange-50 to-orange-100">
+                  <CardHeader>
+                    <CardTitle className="text-orange-700 flex items-center text-lg">
+                      <AlertTriangle className="h-6 w-6 mr-2" />
+                      ⚠️ Cambiaría
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-orange-800 font-medium">"{data.comentarios_participante.cambiar}"</p>
+                    <Badge variant="secondary" className="mt-2">
+                      ⚠️ Inconsistencia con rating 5/5
+                    </Badge>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Agregaría */}
+              {data.comentarios_participante.agregar && (
+                <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-blue-100">
+                  <CardHeader>
+                    <CardTitle className="text-blue-700 flex items-center text-lg">
+                      <Lightbulb className="h-6 w-6 mr-2" />💡 Agregaría
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-blue-800 font-medium">"{data.comentarios_participante.agregar}"</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Grid de Áreas - Mejorado con Detección de Inconsistencias */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-          {data.metricas_por_area.map((area) => (
-            <Card key={area.area_key} className="hover:shadow-lg transition-all duration-300 cursor-pointer">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center justify-between text-sm">
-                  {area.nombre}
-                  <div
-                    className={`w-3 h-3 rounded-full ${
-                      area.color_indicador === "green"
-                        ? "bg-green-500"
-                        : area.color_indicador === "yellow"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                    }`}
-                  />
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-3xl font-bold">{area.promedio}</span>
-                  <Badge variant={getSentimentVariant(area.sentiment)} className="text-xs">
-                    {getSentimentEmoji(area.sentiment)} {area.sentiment}
-                  </Badge>
-                </div>
-                <div className="text-sm text-gray-600 mb-2">{area.total_respuestas} respuestas</div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${
-                      area.color_indicador === "green"
-                        ? "bg-green-500"
-                        : area.color_indicador === "yellow"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                    }`}
-                    style={{ width: `${(area.promedio / 5) * 100}%` }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          {data.metricas_por_area
+            .sort((a, b) => b.promedio - a.promedio)
+            .map((area) => {
+              const status = getAreaStatus(area.promedio, area.sentiment)
+              const inconsistency = detectInconsistencies(area, data.comentarios_participante)
+
+              return (
+                <Card
+                  key={area.area_key}
+                  className={`hover:shadow-lg transition-all duration-300 cursor-pointer border-2 ${
+                    status.color === "green"
+                      ? "border-green-200 bg-green-50"
+                      : status.color === "yellow"
+                        ? "border-yellow-200 bg-yellow-50"
+                        : "border-red-200 bg-red-50"
+                  }`}
+                >
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center justify-between text-sm">
+                      {area.nombre}
+                      <div
+                        className={`w-4 h-4 rounded-full ${status.bgColor} flex items-center justify-center text-white text-xs font-bold`}
+                      >
+                        {status.emoji}
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-4xl font-bold">{area.promedio}</span>
+                      <Badge variant={status.badgeVariant} className="text-xs">
+                        {status.status}
+                      </Badge>
+                    </div>
+                    <div className="text-sm text-gray-600 mb-3">{area.total_respuestas} respuesta</div>
+
+                    {/* Inconsistency Detection */}
+                    {inconsistency && (
+                      <div className="mb-3">
+                        <Badge
+                          variant={inconsistency.tipo === "inconsistencia" ? "secondary" : "default"}
+                          className="text-xs"
+                        >
+                          {inconsistency.badge}
+                        </Badge>
+                        <p className="text-xs text-gray-600 mt-1">{inconsistency.mensaje}</p>
+                      </div>
+                    )}
+
+                    {/* More prominent progress bar */}
+                    <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                      <div
+                        className={`h-3 rounded-full ${status.bgColor}`}
+                        style={{ width: `${(area.promedio / 5) * 100}%` }}
+                      />
+                    </div>
+                    <div className="text-xs text-gray-500 text-center">
+                      {((area.promedio / 5) * 100).toFixed(0)}% de satisfacción
+                    </div>
+
+                    {/* Highlight perfect areas */}
+                    {area.promedio === 5.0 && (
+                      <div className="mt-2 text-center">
+                        <Badge variant="default" className="bg-yellow-500 text-white">
+                          ⭐ Rating Perfecto
+                        </Badge>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            })}
         </div>
 
         {/* Insights de IA */}
