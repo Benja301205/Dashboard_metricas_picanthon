@@ -81,7 +81,7 @@ const useFetchDashboardData = () => {
       setLoading(true)
       setError(null)
 
-      const response = await fetch("https://snowmba.app.n8n.cloud/webhook/picanthon-dashboard", {
+      const response = await fetch("https://arodriguez27.app.n8n.cloud/webhook/picanthon-dashboard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
