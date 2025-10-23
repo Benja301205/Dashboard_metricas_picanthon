@@ -91,7 +91,7 @@ const dashboardData: DashboardData = {
     porcentaje_positivo: 86.2,
     probabilidad_retorno: 4.93,
     influencers_potenciales: 96.6,
-    fecha_analisis: "Octubre 2025",
+    fecha_analisis: "14 de Junio 2025",
   },
   metricas_por_dimension: [
     { dimension: "Probabilidad de retorno (2da edición)", promedio: 4.93, nivel: "⭐⭐⭐⭐⭐", icono: "🔄" },
@@ -323,7 +323,7 @@ export default function PicanthonDashboard() {
               </Link>
               <span className="text-gray-400">/</span>
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                Primera Edición 2024 🇦🇷
+                Primera Edición - 14 Jun 2025 🇦🇷
               </Badge>
             </div>
             <h1 className="text-3xl font-bold text-gray-900">🎯 Picanthon Dashboard</h1>

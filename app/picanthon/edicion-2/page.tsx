@@ -91,7 +91,7 @@ const dashboardData: DashboardData = {
     porcentaje_positivo: 88.9,
     probabilidad_retorno: 4.89,
     influencers_potenciales: 88.9,
-    fecha_analisis: "23 de Octubre 2025",
+    fecha_analisis: "18 de Octubre 2025",
   },
   metricas_por_dimension: [
     { dimension: "Probabilidad de volver", promedio: 4.89, nivel: "⭐⭐⭐⭐⭐", icono: "🔄" },
@@ -351,7 +351,7 @@ export default function PicanthonDashboard() {
               </Link>
               <span className="text-gray-400">/</span>
               <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
-                Segunda Edición 2025 🇺🇾
+                Segunda Edición - 18 Oct 2025 🇺🇾
               </Badge>
             </div>
             <h1 className="text-3xl font-bold text-gray-900">🎯 Picanthon Uruguay Dashboard</h1>

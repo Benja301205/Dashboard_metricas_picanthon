@@ -102,10 +102,10 @@ export default function AlertlyHome() {
                   <Calendar className="h-5 w-5 text-gray-400" />
                 </div>
                 <CardTitle className="text-2xl group-hover:text-green-600 transition-colors">
-                  Picanthon 2024 🇦🇷
+                  Picanthon 2025 🇦🇷
                 </CardTitle>
                 <CardDescription className="text-base">
-                  Primera edición del hackathon - Argentina
+                  Primera edición - 14 de junio 2025 - Argentina
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -145,7 +145,7 @@ export default function AlertlyHome() {
                   Picanthon Uruguay 2025
                 </CardTitle>
                 <CardDescription className="text-base">
-                  Segunda edición en Uruguay
+                  Segunda edición - 18 de octubre 2025 - Uruguay
                 </CardDescription>
               </CardHeader>
               <CardContent>
