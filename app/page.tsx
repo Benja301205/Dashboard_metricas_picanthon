@@ -1,10 +1,6 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { RefreshCw, AlertTriangle, Lightbulb, TrendingUp, Users, Star } from "lucide-react"
+import { AlertTriangle, Lightbulb, TrendingUp, Users, Star } from "lucide-react"
 
 // Types based on real data structure
 interface DashboardData {
@@ -86,8 +82,8 @@ interface DashboardData {
   }
 }
 
-// Mock data based on actual analysis report
-const mockDashboardData: DashboardData = {
+// Dashboard data - actualizar manualmente con nueva información
+const dashboardData: DashboardData = {
   resumen_ejecutivo: {
     total_respuestas: 29,
     sentimiento_promedio: 0.73,
@@ -278,67 +274,7 @@ const mockDashboardData: DashboardData = {
   },
 }
 
-// Custom hook for data fetching
-const useFetchDashboardData = () => {
-  const [data, setData] = useState<DashboardData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
-
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const response = await fetch("https://arodriguez27.app.n8n.cloud/webhook/picanthon-dashboard", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "cors",
-      })
-
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`)
-      }
-
-      const result = await response.json()
-      const finalData = Array.isArray(result) ? result[0] : result
-
-      setData(finalData)
-      setLastUpdated(new Date())
-      setIsConnected(true)
-    } catch (err) {
-      // Use fallback data when API fails
-      console.warn("API fetch failed, using fallback data:", err)
-      setData(mockDashboardData)
-      setLastUpdated(new Date())
-      setIsConnected(false)
-      setError(null) // Clear error to show dashboard with fallback data
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  return { data, loading, error, refetch: fetchData, lastUpdated, isConnected }
-}
-
 // Utility functions
-const formatTime = (timestamp: string) => {
-  return new Date(timestamp).toLocaleString("es-ES", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  })
-}
-
 const getSentimentColor = (score: number) => {
   if (score >= 0.9) return "text-green-600"
   if (score >= 0.6) return "text-blue-600"
@@ -372,71 +308,15 @@ const getImpactBadgeVariant = (impacto: string): "default" | "secondary" | "dest
 }
 
 export default function PicanthonDashboard() {
-  const { data, loading, error, refetch, lastUpdated, isConnected } = useFetchDashboardData()
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-500" />
-          <p className="text-gray-600">Cargando análisis del evento...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6 text-center">
-            <AlertTriangle className="h-8 w-8 text-red-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Error de Conexión</h3>
-            <p className="text-gray-600 mb-4">No se pudieron cargar los datos: {error}</p>
-            <Button onClick={refetch} className="w-full">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Reintentar
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  if (!data) return null
+  const data = dashboardData
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Ejecutivo */}
       <header className="bg-white shadow-sm p-6 mb-8">
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">🎯 Picanthon Dashboard</h1>
-            <p className="text-gray-600">Análisis Completo de Feedback Post-Evento</p>
-            <p className="text-sm text-gray-500">
-              Última actualización: {lastUpdated ? formatTime(lastUpdated.toISOString()) : "N/A"}
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Badge variant={isConnected ? "default" : "destructive"}>
-              {isConnected ? "🟢 Conectado" : "🔴 Desconectado"}
-            </Badge>
-            <Button onClick={refetch} disabled={loading}>
-              {loading ? (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                  Actualizando...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Actualizar Datos
-                </>
-              )}
-            </Button>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">🎯 Picanthon Dashboard</h1>
+          <p className="text-gray-600">Análisis Completo de Feedback Post-Evento</p>
         </div>
       </header>
 
