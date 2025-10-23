@@ -1,771 +1,185 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from "next/link"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { AlertTriangle, Lightbulb, TrendingUp, Users, Star } from "lucide-react"
+import { TrendingUp, MessageSquare, BarChart3, Sparkles, ArrowRight, Calendar, MapPin } from "lucide-react"
 
-// Types based on real data structure
-interface DashboardData {
-  resumen_ejecutivo: {
-    total_respuestas: number
-    sentimiento_promedio: number
-    porcentaje_positivo: number
-    probabilidad_retorno: number
-    influencers_potenciales: number
-    fecha_analisis: string
-  }
-  metricas_por_dimension: Array<{
-    dimension: string
-    promedio: number
-    nivel: string
-    icono: string
-  }>
-  distribucion_sentimiento: {
-    muy_positivo: number
-    positivo: number
-    neutral: number
-    negativo: number
-    muy_negativo: number
-  }
-  pain_points: {
-    criticos: Array<{
-      categoria: string
-      menciones: number
-      severidad: string
-      problema: string
-      impacto: string
-      comentarios: string[]
-    }>
-    secundarios: Array<{
-      categoria: string
-      menciones: number
-      problema: string
-    }>
-  }
-  fortalezas: Array<{
-    categoria: string
-    menciones: number
-    porque_funciono: string
-    comentarios_destacados: string[]
-  }>
-  insights_accionables: {
-    quick_wins: Array<{
-      prioridad: number
-      titulo: string
-      accion: string
-      solucion: string
-      frecuencia: string
-      costo: string
-      impacto: string
-    }>
-    mejoras_estructurales: Array<{
-      prioridad: number
-      titulo: string
-      accion: string
-      solucion: string
-      frecuencia: string
-      costo: string
-      impacto: string
-    }>
-  }
-  perfil_participantes: {
-    nivel_experiencia: {
-      alto: number
-      intermedio: number
-      novato: number
-    }
-    engagement: {
-      activo: number
-      pasivo: number
-    }
-    retencion: {
-      riesgo_bajo: number
-    }
-  }
-}
-
-// Dashboard data - actualizar manualmente con nueva información
-const dashboardData: DashboardData = {
-  resumen_ejecutivo: {
-    total_respuestas: 29,
-    sentimiento_promedio: 0.73,
-    porcentaje_positivo: 86.2,
-    probabilidad_retorno: 4.93,
-    influencers_potenciales: 96.6,
-    fecha_analisis: "Octubre 2025",
-  },
-  metricas_por_dimension: [
-    { dimension: "Probabilidad de retorno (2da edición)", promedio: 4.93, nivel: "⭐⭐⭐⭐⭐", icono: "🔄" },
-    { dimension: "Calidad de mentores", promedio: 4.86, nivel: "⭐⭐⭐⭐⭐", icono: "👨‍🏫" },
-    { dimension: "Calidad del lugar", promedio: 4.72, nivel: "⭐⭐⭐⭐", icono: "🏠" },
-    { dimension: "Claridad de la consigna", promedio: 4.31, nivel: "⭐⭐⭐⭐", icono: "📋" },
-    { dimension: "Calidad de la comida", promedio: 4.21, nivel: "⭐⭐⭐⭐", icono: "🍽️" },
-    { dimension: "Decisión de los jueces", promedio: 4.17, nivel: "⭐⭐⭐⭐", icono: "⚖️" },
-    { dimension: "Dinámica del pitch", promedio: 4.03, nivel: "⭐⭐⭐⭐", icono: "🎤" },
-    { dimension: "Calidad de minijuegos", promedio: 3.17, nivel: "⭐⭐⭐", icono: "🎮" },
-  ],
-  distribucion_sentimiento: {
-    muy_positivo: 3,
-    positivo: 22,
-    neutral: 2,
-    negativo: 2,
-    muy_negativo: 0,
-  },
-  pain_points: {
-    criticos: [
-      {
-        categoria: "MINIJUEGOS",
-        menciones: 9,
-        severidad: "Moderada-Alta",
-        problema: "Percibidos como 'de relleno' y con baja calidad",
-        impacto: "Reducción del engagement y oportunidades perdidas de networking",
-        comentarios: [
-          "Lo que menos me gustaron fueron los minijuegos, siento estaban muy de relleno, quizás unos minigames para que se pueda interactuar con otros participantes sea mejor",
-        ],
-      },
-      {
-        categoria: "LUGAR - Infraestructura",
-        menciones: 7,
-        severidad: "Moderada",
-        problema: "Frío en el quincho, falta de espacios diferenciados, exclusión de equipos",
-        impacto: "Incomodidad durante el desarrollo, ambiente no óptimo para trabajo técnico",
-        comentarios: [
-          "Agregaría un lugar que tenga una parte para trabajar de forma más cómoda y otra que sea para estar más chill y descansar si se quiere",
-        ],
-      },
-      {
-        categoria: "CONECTIVIDAD",
-        menciones: 5,
-        severidad: "Alta",
-        problema: "Conexión WiFi deficiente e inestable",
-        impacto: "Obstaculiza el desarrollo técnico y productividad",
-        comentarios: ["WiFi inestable dificultó el trabajo con APIs"],
-      },
-      {
-        categoria: "JUECES - Transparencia",
-        menciones: 4,
-        severidad: "Moderada",
-        problema: "Falta de claridad en criterios de evaluación y feedback insuficiente",
-        impacto: "Incertidumbre en equipos sobre qué mejorar",
-        comentarios: [
-          "Devolución de los jueces y cómo pensaron la votación",
-          "Más feedback de las decisiones post pitch",
-        ],
-      },
-    ],
-    secundarios: [
-      { categoria: "COMIDA", menciones: 3, problema: "Calidad del proveedor del almuerzo, falta de variedad" },
-      { categoria: "TIEMPO", menciones: 3, problema: "Tiempo insuficiente para pitches y feedback del jurado" },
-      {
-        categoria: "MENTORES",
-        menciones: 2,
-        problema: "Falta de seguimiento post-evento, diferenciación poco clara de especialidades",
-      },
-      { categoria: "NETWORKING", menciones: 2, problema: "Tiempo insuficiente para interacción entre participantes" },
-    ],
-  },
-  fortalezas: [
-    {
-      categoria: "MENTORES",
-      menciones: 24,
-      porque_funciono:
-        "Excelente energía y actitud colaborativa, alta disponibilidad y conocimiento técnico, contribución directa a experiencias memorables",
-      comentarios_destacados: [
-        "Excelente la energía y la buena onda de todos los mentores, la verdad que ayudó a que todo sea una experiencia increíble",
-      ],
-    },
-    {
-      categoria: "LUGAR",
-      menciones: 12,
-      porque_funciono:
-        "Instalaciones generalmente adecuadas, ubicación conveniente, ambiente propicio para trabajo en equipo",
-      comentarios_destacados: ["El lugar estuvo muy bien, cómodo para trabajar"],
-    },
-    {
-      categoria: "COMIDA",
-      menciones: 8,
-      porque_funciono: "Calidad general buena (a pesar de problemas puntuales), variedad satisfactoria para la mayoría",
-      comentarios_destacados: ["La comida estuvo rica y variada"],
-    },
-    {
-      categoria: "JUECES",
-      menciones: 5,
-      porque_funciono: "Accesibles y colaborativos durante el evento, feedback valioso cuando se brindó",
-      comentarios_destacados: ["Los jueces unos copados como ayudaban al igual que los mentores"],
-    },
-  ],
-  insights_accionables: {
-    quick_wins: [
-      {
-        prioridad: 1,
-        titulo: "Minijuegos Interactivos",
-        accion: "Rediseñar completamente los minijuegos",
-        solucion:
-          "Implementar actividades que fomenten networking natural (ej. metegol, juegos de mesa colaborativos), eliminar 'actividades de relleno', vincular minijuegos con objetivos de team building",
-        frecuencia: "Alta",
-        costo: "Bajo",
-        impacto: "Alto",
-      },
-      {
-        prioridad: 2,
-        titulo: "Transparencia en Evaluación",
-        accion: "Documentar y comunicar criterios de jurado",
-        solucion:
-          "Publicar rubrica de evaluación antes del pitch, sesión de feedback estructurado post-pitch (5-10 min por equipo), explicación pública de decisión final",
-        frecuencia: "Media-Alta",
-        costo: "Bajo",
-        impacto: "Alto",
-      },
-      {
-        prioridad: 3,
-        titulo: "Señalización de Mentores",
-        accion: "Identificar visualmente especialidades",
-        solucion:
-          "Stickers de colores por área (Tech/Producto/Marketing/Negocio), breve presentación al inicio del evento, panel informativo con fotos y especialidades",
-        frecuencia: "Media",
-        costo: "Muy bajo",
-        impacto: "Medio",
-      },
-    ],
-    mejoras_estructurales: [
-      {
-        prioridad: 4,
-        titulo: "Infraestructura del Lugar",
-        accion: "Reconfigurar espacios de trabajo",
-        solucion:
-          "Zona A: Espacio de desarrollo (mesas, enchufes, iluminación), Zona B: Área de descanso/chill (sillones, menor ruido), mejorar calefacción en quincho, unificar ubicación de equipos",
-        frecuencia: "Alta",
-        costo: "Medio-Alto",
-        impacto: "Alto",
-      },
-      {
-        prioridad: 5,
-        titulo: "Conectividad",
-        accion: "Auditoría y upgrade de infraestructura de red",
-        solucion:
-          "Contratar servicio de WiFi empresarial con SLA garantizado, puntos de acceso distribuidos estratégicamente, plan B: hotspots de respaldo",
-        frecuencia: "Alta",
-        costo: "Medio",
-        impacto: "Crítico",
-      },
-      {
-        prioridad: 6,
-        titulo: "Proveedor de Comida",
-        accion: "Revisar contrato y opciones",
-        solucion:
-          "Realizar licitación con degustación previa, incluir más opciones de bebidas, snacks saludables y frutas, considerar feedback específico sobre almuerzo",
-        frecuencia: "Media",
-        costo: "Variable",
-        impacto: "Medio",
-      },
-    ],
-  },
-  perfil_participantes: {
-    nivel_experiencia: {
-      alto: 37.9,
-      intermedio: 58.6,
-      novato: 3.4,
-    },
-    engagement: {
-      activo: 93.1,
-      pasivo: 6.9,
-    },
-    retencion: {
-      riesgo_bajo: 100,
-    },
-  },
-}
-
-// Utility functions
-const getSentimentColor = (score: number) => {
-  if (score >= 0.9) return "text-green-600"
-  if (score >= 0.6) return "text-blue-600"
-  if (score >= 0.3) return "text-yellow-600"
-  return "text-red-600"
-}
-
-const getSentimentBgColor = (score: number) => {
-  if (score >= 0.9) return "bg-green-500"
-  if (score >= 0.6) return "bg-blue-500"
-  if (score >= 0.3) return "bg-yellow-500"
-  return "bg-red-500"
-}
-
-const getSeverityColor = (severidad: string) => {
-  if (severidad.includes("Alta")) return "destructive"
-  if (severidad.includes("Moderada")) return "secondary"
-  return "outline"
-}
-
-const getCostBadgeVariant = (costo: string): "default" | "secondary" | "destructive" | "outline" => {
-  if (costo.includes("Bajo")) return "default"
-  if (costo.includes("Medio")) return "secondary"
-  return "outline"
-}
-
-const getImpactBadgeVariant = (impacto: string): "default" | "secondary" | "destructive" | "outline" => {
-  if (impacto.includes("Alto") || impacto.includes("Crítico")) return "default"
-  if (impacto.includes("Medio")) return "secondary"
-  return "outline"
-}
-
-export default function PicanthonDashboard() {
-  const data = dashboardData
-
+export default function AlertlyHome() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header Ejecutivo */}
-      <header className="bg-white shadow-sm p-6 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">🎯 Picanthon Dashboard</h1>
-          <p className="text-gray-600">Análisis Completo de Feedback Post-Evento</p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
+      {/* Hero Section */}
+      <header className="container mx-auto px-6 pt-16 pb-12">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-2xl shadow-lg">
+              <MessageSquare className="h-12 w-12" />
+            </div>
+          </div>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Alertly
+            </span>
+          </h1>
+          <p className="text-2xl text-gray-700 mb-4 font-medium">
+            El oído inteligente que escucha a tus clientes
+          </p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Transformamos feedback y encuestas en insights accionables usando inteligencia artificial.
+            Detectamos automáticamente qué funciona, qué necesita mejorar y qué quieren tus clientes.
+          </p>
         </div>
       </header>
 
-      <div className="container mx-auto px-6 pb-8">
-        {/* Resumen Ejecutivo Hero */}
-        <Card className="mb-8 bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200">
-          <CardContent className="p-8">
-            <h2 className="text-2xl font-bold mb-6 text-center">📊 Resumen Ejecutivo</h2>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">{data.resumen_ejecutivo.total_respuestas}</div>
-                <div className="text-sm text-gray-600">Respuestas</div>
+      {/* Features Section */}
+      <section className="container mx-auto px-6 py-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-16">
+          <Card className="border-2 border-purple-200 hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
+                <Sparkles className="h-6 w-6 text-purple-600" />
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">
-                  {(data.resumen_ejecutivo.sentimiento_promedio * 100).toFixed(0)}%
-                </div>
-                <div className="text-sm text-gray-600">Sentimiento</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">
-                  {data.resumen_ejecutivo.porcentaje_positivo.toFixed(1)}%
-                </div>
-                <div className="text-sm text-gray-600">Positivo</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600">
-                  {data.resumen_ejecutivo.probabilidad_retorno.toFixed(2)}/5
-                </div>
-                <div className="text-sm text-gray-600">Retorno</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-pink-600">
-                  {data.resumen_ejecutivo.influencers_potenciales.toFixed(1)}%
-                </div>
-                <div className="text-sm text-gray-600">Influencers</div>
-              </div>
-            </div>
-            <div className="mt-6 bg-white/50 p-4 rounded-lg">
-              <p className="text-center text-gray-700 font-medium">
-                🎉 <strong>{data.resumen_ejecutivo.porcentaje_positivo.toFixed(1)}%</strong> de participantes expresaron
-                sentimientos positivos con una probabilidad de retorno de{" "}
-                <strong>{data.resumen_ejecutivo.probabilidad_retorno.toFixed(2)}/5.0</strong>
+              <CardTitle className="text-xl">Análisis Automático</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Procesamos miles de comentarios y detectamos patrones, sentimientos y tendencias en segundos.
               </p>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Métricas por Dimensión */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6">⭐ Métricas por Dimensión</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {data.metricas_por_dimension.map((dimension, index) => {
-              const status =
-                dimension.promedio >= 4.5
-                  ? { color: "green", emoji: "🟢", bg: "bg-green-50", border: "border-green-200" }
-                  : dimension.promedio >= 3.5
-                    ? { color: "yellow", emoji: "🟡", bg: "bg-yellow-50", border: "border-yellow-200" }
-                    : { color: "red", emoji: "🔴", bg: "bg-red-50", border: "border-red-200" }
-
-              return (
-                <Card key={index} className={`${status.bg} border-2 ${status.border}`}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm flex items-center justify-between">
-                      <span>{dimension.dimension}</span>
-                      <span className="text-lg">{status.emoji}</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold mb-2">{dimension.promedio.toFixed(2)}/5</div>
-                    <div className="text-sm text-gray-600 mb-2">{dimension.nivel}</div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full ${status.color === "green" ? "bg-green-500" : status.color === "yellow" ? "bg-yellow-500" : "bg-red-500"}`}
-                        style={{ width: `${(dimension.promedio / 5) * 100}%` }}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Distribución de Sentimiento */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>😊 Distribución de Sentimiento</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                {
-                  label: "Muy Positivo",
-                  value: data.distribucion_sentimiento.muy_positivo,
-                  color: "bg-green-600",
-                  total: data.resumen_ejecutivo.total_respuestas,
-                },
-                {
-                  label: "Positivo",
-                  value: data.distribucion_sentimiento.positivo,
-                  color: "bg-blue-500",
-                  total: data.resumen_ejecutivo.total_respuestas,
-                },
-                {
-                  label: "Neutral",
-                  value: data.distribucion_sentimiento.neutral,
-                  color: "bg-gray-400",
-                  total: data.resumen_ejecutivo.total_respuestas,
-                },
-                {
-                  label: "Negativo",
-                  value: data.distribucion_sentimiento.negativo,
-                  color: "bg-orange-500",
-                  total: data.resumen_ejecutivo.total_respuestas,
-                },
-                {
-                  label: "Muy Negativo",
-                  value: data.distribucion_sentimiento.muy_negativo,
-                  color: "bg-red-600",
-                  total: data.resumen_ejecutivo.total_respuestas,
-                },
-              ].map((item, index) => (
-                <div key={index}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">{item.label}</span>
-                    <span className="text-sm font-semibold">
-                      {item.value} ({((item.value / item.total) * 100).toFixed(1)}%)
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div
-                      className={`h-3 rounded-full ${item.color}`}
-                      style={{ width: `${(item.value / item.total) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Pain Points Críticos */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <AlertTriangle className="h-6 w-6 mr-2 text-red-600" />🚨 Pain Points Críticos
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {data.pain_points.criticos.map((pain, index) => (
-              <Card key={index} className="border-2 border-red-200 bg-red-50">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span className="text-red-700">{pain.categoria}</span>
-                    <Badge variant={getSeverityColor(pain.severidad)}>{pain.severidad}</Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div>
-                      <span className="text-sm font-semibold text-red-700">Menciones: </span>
-                      <span className="text-sm">{pain.menciones}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold text-red-700">Problema: </span>
-                      <span className="text-sm">{pain.problema}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold text-red-700">Impacto: </span>
-                      <span className="text-sm">{pain.impacto}</span>
-                    </div>
-                    {pain.comentarios && pain.comentarios.length > 0 && (
-                      <div className="mt-3 p-3 bg-white rounded-lg">
-                        <span className="text-xs font-semibold text-red-700">Comentario destacado:</span>
-                        <p className="text-xs italic mt-1">"{pain.comentarios[0]}"</p>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Pain Points Secundarios */}
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-4">⚠️ Problemas Secundarios</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {data.pain_points.secundarios.map((pain, index) => (
-                <Card key={index} className="border border-orange-200 bg-orange-50">
-                  <CardContent className="p-4">
-                    <div className="font-semibold text-orange-700 mb-1">
-                      {pain.categoria} ({pain.menciones})
-                    </div>
-                    <div className="text-sm text-orange-800">{pain.problema}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Fortalezas del Evento */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Star className="h-6 w-6 mr-2 text-green-600" />⭐ Pilares de Éxito
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data.fortalezas.map((fortaleza, index) => (
-              <Card key={index} className="border-2 border-green-300 bg-gradient-to-br from-green-50 to-green-100">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between text-green-700">
-                    <span>{fortaleza.categoria}</span>
-                    <Badge variant="default" className="bg-green-600">
-                      {fortaleza.menciones} menciones
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="mb-3">
-                    <span className="text-sm font-semibold text-green-700">Por qué funcionó:</span>
-                    <p className="text-sm text-green-800 mt-1">{fortaleza.porque_funciono}</p>
-                  </div>
-                  {fortaleza.comentarios_destacados && fortaleza.comentarios_destacados.length > 0 && (
-                    <div className="mt-3 p-3 bg-white rounded-lg">
-                      <span className="text-xs font-semibold text-green-700">Comentario destacado:</span>
-                      <p className="text-xs italic mt-1">"{fortaleza.comentarios_destacados[0]}"</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Quick Wins */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <TrendingUp className="h-6 w-6 mr-2 text-blue-600" />🎯 Quick Wins (Implementación Inmediata)
-          </h2>
-          <div className="space-y-4">
-            {data.insights_accionables.quick_wins.map((insight, index) => (
-              <Card key={index} className="border-2 border-blue-200">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span className="text-blue-700">
-                      Prioridad {insight.prioridad}: {insight.titulo}
-                    </span>
-                    <div className="flex gap-2">
-                      <Badge variant={getCostBadgeVariant(insight.costo)}>💰 {insight.costo}</Badge>
-                      <Badge variant={getImpactBadgeVariant(insight.impacto)}>⚡ {insight.impacto}</Badge>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-sm font-semibold">Acción:</span>
-                      <p className="text-sm">{insight.accion}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold">Solución:</span>
-                      <p className="text-sm">{insight.solucion}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline">Frecuencia: {insight.frecuencia}</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Mejoras Estructurales */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Lightbulb className="h-6 w-6 mr-2 text-orange-600" />
-            🏗️ Mejoras Estructurales (Mediano Plazo)
-          </h2>
-          <div className="space-y-4">
-            {data.insights_accionables.mejoras_estructurales.map((mejora, index) => (
-              <Card key={index} className="border-2 border-orange-200">
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span className="text-orange-700">
-                      Prioridad {mejora.prioridad}: {mejora.titulo}
-                    </span>
-                    <div className="flex gap-2">
-                      <Badge variant={getCostBadgeVariant(mejora.costo)}>💰 {mejora.costo}</Badge>
-                      <Badge variant={getImpactBadgeVariant(mejora.impacto)}>⚡ {mejora.impacto}</Badge>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-sm font-semibold">Acción:</span>
-                      <p className="text-sm">{mejora.accion}</p>
-                    </div>
-                    <div>
-                      <span className="text-sm font-semibold">Solución:</span>
-                      <p className="text-sm">{mejora.solucion}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline">Frecuencia: {mejora.frecuencia}</Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Perfil de Participantes */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Users className="h-6 w-6 mr-2" />👥 Perfil de Participantes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="font-semibold mb-3 text-center">Nivel de Experiencia</h4>
-                <div className="space-y-2">
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Alto</span>
-                      <span className="font-semibold">
-                        {data.perfil_participantes.nivel_experiencia.alto.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-purple-500 h-2 rounded-full"
-                        style={{ width: `${data.perfil_participantes.nivel_experiencia.alto}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Intermedio</span>
-                      <span className="font-semibold">
-                        {data.perfil_participantes.nivel_experiencia.intermedio.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full"
-                        style={{ width: `${data.perfil_participantes.nivel_experiencia.intermedio}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Novato</span>
-                      <span className="font-semibold">
-                        {data.perfil_participantes.nivel_experiencia.novato.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-green-500 h-2 rounded-full"
-                        style={{ width: `${data.perfil_participantes.nivel_experiencia.novato}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
+          <Card className="border-2 border-blue-200 hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
+                <TrendingUp className="h-6 w-6 text-blue-600" />
               </div>
+              <CardTitle className="text-xl">Insights Accionables</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Identificamos problemas críticos y oportunidades de mejora con recomendaciones claras y priorizadas.
+              </p>
+            </CardContent>
+          </Card>
 
-              <div>
-                <h4 className="font-semibold mb-3 text-center">Engagement</h4>
-                <div className="space-y-2">
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Activo</span>
-                      <span className="font-semibold">{data.perfil_participantes.engagement.activo.toFixed(1)}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-green-600 h-2 rounded-full"
-                        style={{ width: `${data.perfil_participantes.engagement.activo}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Pasivo</span>
-                      <span className="font-semibold">{data.perfil_participantes.engagement.pasivo.toFixed(1)}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-gray-400 h-2 rounded-full"
-                        style={{ width: `${data.perfil_participantes.engagement.pasivo}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
+          <Card className="border-2 border-pink-200 hover:shadow-xl transition-shadow">
+            <CardHeader>
+              <div className="bg-pink-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
+                <BarChart3 className="h-6 w-6 text-pink-600" />
               </div>
+              <CardTitle className="text-xl">Visualización Clara</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Dashboards interactivos que muestran métricas clave, tendencias y comparaciones de forma visual.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
 
-              <div>
-                <h4 className="font-semibold mb-3 text-center">Retención</h4>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-green-600 mb-2">
-                    {data.perfil_participantes.retencion.riesgo_bajo.toFixed(1)}%
-                  </div>
-                  <p className="text-sm text-gray-600">Riesgo de abandono bajo</p>
-                  <Badge variant="default" className="mt-2 bg-green-600">
-                    Audiencia valiosa
+        {/* Case Study Header */}
+        <div className="text-center mb-12">
+          <Badge className="mb-4 text-sm px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600">
+            Casos de Análisis
+          </Badge>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            Análisis de Feedback: Picanthon
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Analizamos el feedback de las ediciones de Picanthon, la hackathon organizada por Picante,
+            para ayudarles a entender qué funcionó y cómo mejorar futuras ediciones.
+          </p>
+        </div>
+
+        {/* Picanthon Editions Cards */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* Edición 1 */}
+          <Link href="/picanthon/edicion-1">
+            <Card className="h-full border-2 border-green-200 hover:border-green-400 hover:shadow-2xl transition-all cursor-pointer group">
+              <CardHeader>
+                <div className="flex items-start justify-between mb-3">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+                    Primera Edición
                   </Badge>
+                  <Calendar className="h-5 w-5 text-gray-400" />
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Conclusión Final */}
-        <Card className="bg-gradient-to-r from-blue-600 to-green-600 text-white">
-          <CardContent className="p-8">
-            <h2 className="text-2xl font-bold mb-4 text-center">🎯 Conclusión Estratégica</h2>
-            <div className="space-y-4">
-              <p className="text-center text-lg">
-                El <strong>Picanthon</strong> demostró ser un evento <strong>altamente exitoso</strong> con fortalezas
-                extraordinarias en su equipo de mentores y jueces, logrando una experiencia memorable para el{" "}
-                <strong>{data.resumen_ejecutivo.porcentaje_positivo.toFixed(1)}%</strong> de participantes.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                <div className="bg-white/20 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold">{data.resumen_ejecutivo.probabilidad_retorno.toFixed(2)}/5</div>
-                  <div className="text-sm">Probabilidad de Retorno</div>
-                </div>
-                <div className="bg-white/20 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold">{data.resumen_ejecutivo.influencers_potenciales.toFixed(1)}%</div>
-                  <div className="text-sm">Influencers Potenciales</div>
-                </div>
-                <div className="bg-white/20 p-4 rounded-lg text-center">
-                  <div className="text-3xl font-bold">
-                    {data.perfil_participantes.retencion.riesgo_bajo.toFixed(1)}%
+                <CardTitle className="text-2xl group-hover:text-green-600 transition-colors">
+                  Picanthon 2024 🇦🇷
+                </CardTitle>
+                <CardDescription className="text-base">
+                  Primera edición del hackathon - Argentina
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <MapPin className="h-4 w-4 mr-2 text-green-600" />
+                    Argentina 🇦🇷
                   </div>
-                  <div className="text-sm">Retención Alta</div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <BarChart3 className="h-4 w-4 mr-2 text-green-600" />
+                    29 respuestas analizadas
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
+                    Sentimiento positivo: 73%
+                  </div>
                 </div>
-              </div>
-              <p className="text-center text-sm mt-4 opacity-90">
-                Las oportunidades de mejora se concentran en aspectos logísticos y de diseño de actividades. Implementar
-                las recomendaciones priorizadas puede elevar el evento de "excelente" a "referencia de la industria".
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                <div className="flex items-center text-green-600 font-medium group-hover:translate-x-2 transition-transform">
+                  Ver Dashboard
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Edición 2 */}
+          <Link href="/picanthon/edicion-2">
+            <Card className="h-full border-2 border-blue-200 hover:border-blue-400 hover:shadow-2xl transition-all cursor-pointer group">
+              <CardHeader>
+                <div className="flex items-start justify-between mb-3">
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+                    Segunda Edición
+                  </Badge>
+                  <Calendar className="h-5 w-5 text-gray-400" />
+                </div>
+                <CardTitle className="text-2xl group-hover:text-blue-600 transition-colors">
+                  Picanthon Uruguay 2025
+                </CardTitle>
+                <CardDescription className="text-base">
+                  Segunda edición en Uruguay
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <MapPin className="h-4 w-4 mr-2 text-blue-600" />
+                    Montevideo, Uruguay 🇺🇾
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <BarChart3 className="h-4 w-4 mr-2 text-blue-600" />
+                    Análisis completo de feedback
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Sparkles className="h-4 w-4 mr-2 text-blue-600" />
+                    Insights y mejoras detectadas
+                  </div>
+                </div>
+                <div className="flex items-center text-blue-600 font-medium group-hover:translate-x-2 transition-transform">
+                  Ver Dashboard
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="container mx-auto px-6 py-8 text-center text-gray-600 border-t border-gray-200 mt-16">
+        <p className="text-sm">
+          Powered by <span className="font-semibold text-purple-600">Alertly</span> -
+          Transformando feedback en acción con IA
+        </p>
+      </footer>
     </div>
   )
 }
