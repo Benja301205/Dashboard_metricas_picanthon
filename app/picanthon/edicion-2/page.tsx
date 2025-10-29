@@ -226,7 +226,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Modificar agenda para dar 3 minutos por pitch. Aumenta solo 12 min el tiempo total para 12 equipos. Solicitado por 33.3% de participantes",
         frecuencia: "Alta (33.3% lo solicitaron)",
-        costo: "Muy Bajo ($0 - cambio de agenda)",
+        costo: "Muy Bajo",
         impacto: "Alto - Satisfacción pitch de 4.06→4.5+",
       },
       {
@@ -236,7 +236,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Template estructurado: Fortalezas identificadas (3), Áreas de oportunidad (2), Comentario general, Puntuación individual por criterio. Enviar a TODOS los equipos",
         frecuencia: "Media (16.7% lo solicitaron explícitamente)",
-        costo: "Bajo ($10,000 compensación o trabajo voluntario)",
+        costo: "Bajo",
         impacto: "Alto - Satisfacción jueces de 3.83→4.3+",
       },
       {
@@ -246,7 +246,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Rúbrica con 5 criterios: Innovación (25%), Ejecución Técnica (25%), Modelo de Negocio (20%), Pitch (15%), Impacto (15%). Publicar en web y briefing inicial",
         frecuencia: "Media",
-        costo: "Muy Bajo ($0 - diseño y publicación)",
+        costo: "Muy Bajo",
         impacto: "Medio - Mayor claridad y transparencia",
       },
       {
@@ -256,7 +256,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Compra de 20 almohadones ergonómicos, 15 mantas livianas, tapones/antifaces (50 unidades). Disponibles gratuitamente para todos",
         frecuencia: "Media (16.7% mencionó ergonomía)",
-        costo: "Bajo ($40,000-50,000 ARS)",
+        costo: "Bajo",
         impacto: "Medio - Satisfacción lugar de 4.33→4.5+",
       },
       {
@@ -266,7 +266,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Frutos secos, galletitas, barritas de cereal, frutas frescas. Disponibles constantemente sin necesidad de pedirlos",
         frecuencia: "Baja (1 mención directa)",
-        costo: "Bajo ($30,000 ARS adicionales)",
+        costo: "Bajo",
         impacto: "Bajo - Satisfacción comida de 4.28→4.4+",
       },
       {
@@ -276,7 +276,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Cada mentor presenta: nombre, background, expertise específico, tipo de proyectos donde puede ayudar. Gafete con color por especialidad",
         frecuencia: "Media (implícito en comentarios)",
-        costo: "Muy Bajo ($0 - solo coordinación)",
+        costo: "Muy Bajo",
         impacto: "Medio - Mayor aprovechamiento de mentores",
       },
     ],
@@ -288,7 +288,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Todos pitchean equitativamente, mejores proyectos brillan con profundidad, jueces toman decisiones más informadas. 5 categorías de premios: Gran Premio, Innovación Técnica, Mejor Modelo Negocio, Mejor Pitch, People's Choice",
         frecuencia: "Alta (33.3% + mejora evaluación)",
-        costo: "Bajo (logística +90min evento)",
+        costo: "Bajo",
         impacto: "Alto - Satisfacción pitch y jueces +10-15%",
       },
       {
@@ -298,7 +298,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Rotación obligatoria 60 min: cada equipo envía 1 representante a testear producto de otro equipo, dar feedback estructurado, compartir aprendizajes. Genera networking genuino y user testing real",
         frecuencia: "Alta (27.8% lo solicitaron)",
-        costo: "Bajo ($20,000-30,000 logística)",
+        costo: "Bajo",
         impacto: "Medio-Alto - Rompe monotonía y crea valor",
       },
       {
@@ -308,7 +308,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Encuesta a alumni + experimento en próxima edición. 38.9% solicitó reducción. Balance trabajo/descanso sin perder intensidad. Elimina brecha de mentoría nocturna",
         frecuencia: "Crítica (38.9% lo mencionaron)",
-        costo: "Bajo (cambio operativo)",
+        costo: "Bajo",
         impacto: "Alto - Reduce fatiga, mantiene calidad",
       },
       {
@@ -318,7 +318,7 @@ const dashboardData: DashboardData = {
         solucion:
           "30 sillas ergonómicas con respaldo lumbar ajustable. Zona separada con 6 puffs, alfombra, cortinas blackout, white noise. Espacios diferenciados: Trabajo Intensivo, Brainstorming, Descanso, Networking",
         frecuencia: "Media (16.7% mencionó)",
-        costo: "Medio-Alto ($480,000-580,000 ARS)",
+        costo: "Medio-Alto",
         impacto: "Medio - Lugar de 4.33→4.7+",
       },
       {
@@ -328,7 +328,7 @@ const dashboardData: DashboardData = {
         solucion:
           "Día (12PM-8PM): 4 mentores, Noche (8PM-4AM): 3 mentores, Madrugada (4AM-12PM): 1 mentor + canal Slack async. Compensación diferencial por turno nocturno",
         frecuencia: "Media (16.7% lo mencionó)",
-        costo: "Medio ($300,000-400,000 compensaciones)",
+        costo: "Medio",
         impacto: "Medio - Mantiene score 4.89, equidad acceso",
       },
     ],
