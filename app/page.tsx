@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, MessageSquare, BarChart3, Sparkles, ArrowRight, Calendar, MapPin } from "lucide-react"
+import { TrendingUp, MessageSquare, BarChart3, Sparkles, ArrowRight, Calendar, MapPin, AlertCircle } from "lucide-react"
 
 export default function AlertlyHome() {
   return (
@@ -170,6 +170,177 @@ export default function AlertlyHome() {
               </CardContent>
             </Card>
           </Link>
+        </div>
+      </section>
+
+      {/* Comparative Analysis Section */}
+      <section className="container mx-auto px-6 py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl my-16">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full mb-4">
+              <BarChart3 className="h-5 w-5 text-purple-600" />
+              <span className="text-sm font-semibold text-purple-700">Análisis Comparativo</span>
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Edición 1 🇦🇷 vs Edición 2 🇺🇾
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Evolución del Picanthon entre Argentina y Uruguay: métricas, mejoras y aprendizajes
+            </p>
+          </div>
+
+          {/* Key Metrics Comparison */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Métricas Clave</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b-2 border-gray-200">
+                    <th className="py-3 px-4 text-gray-700 font-semibold">Métrica</th>
+                    <th className="py-3 px-4 text-center text-green-700 font-semibold">Ed1 🇦🇷</th>
+                    <th className="py-3 px-4 text-center text-blue-700 font-semibold">Ed2 🇺🇾</th>
+                    <th className="py-3 px-4 text-center text-gray-700 font-semibold">Δ</th>
+                    <th className="py-3 px-4 text-center text-gray-700 font-semibold">Tendencia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-4 px-4 font-medium">Satisfacción Global</td>
+                    <td className="py-4 px-4 text-center">4.30/5.00</td>
+                    <td className="py-4 px-4 text-center">4.31/5.00</td>
+                    <td className="py-4 px-4 text-center text-green-600">+0.01</td>
+                    <td className="py-4 px-4 text-center">➡️ Estable</td>
+                  </tr>
+                  <tr className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-4 px-4 font-medium">Probabilidad de Volver</td>
+                    <td className="py-4 px-4 text-center">4.93/5.00</td>
+                    <td className="py-4 px-4 text-center">4.56/5.00</td>
+                    <td className="py-4 px-4 text-center text-red-600">-0.38</td>
+                    <td className="py-4 px-4 text-center">📉 Retroceso</td>
+                  </tr>
+                  <tr className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-4 px-4 font-medium">Mentores</td>
+                    <td className="py-4 px-4 text-center">4.86/5.00</td>
+                    <td className="py-4 px-4 text-center">4.89/5.00</td>
+                    <td className="py-4 px-4 text-center text-green-600">+0.03</td>
+                    <td className="py-4 px-4 text-center">⭐ Excelente</td>
+                  </tr>
+                  <tr className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-4 px-4 font-medium">MiniGames</td>
+                    <td className="py-4 px-4 text-center">3.17/5.00</td>
+                    <td className="py-4 px-4 text-center">3.94/5.00</td>
+                    <td className="py-4 px-4 text-center text-green-600 font-bold">+0.77</td>
+                    <td className="py-4 px-4 text-center">🚀 +24.3%</td>
+                  </tr>
+                  <tr className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-4 px-4 font-medium">Lugar</td>
+                    <td className="py-4 px-4 text-center">4.72/5.00</td>
+                    <td className="py-4 px-4 text-center">4.33/5.00</td>
+                    <td className="py-4 px-4 text-center text-red-600">-0.39</td>
+                    <td className="py-4 px-4 text-center">📉 -8.3%</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50">
+                    <td className="py-4 px-4 font-medium">Jueces</td>
+                    <td className="py-4 px-4 text-center">4.17/5.00</td>
+                    <td className="py-4 px-4 text-center">3.83/5.00</td>
+                    <td className="py-4 px-4 text-center text-red-600">-0.34</td>
+                    <td className="py-4 px-4 text-center">📉 -8.1%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* What Improved vs What Got Worse */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {/* Improvements */}
+            <div className="bg-green-50 rounded-2xl p-6 border-2 border-green-200">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="h-6 w-6 text-green-600" />
+                <h3 className="text-xl font-bold text-green-900">Lo que Mejoró</h3>
+              </div>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold mt-1">🚀</span>
+                  <div>
+                    <p className="font-semibold text-green-900">MiniGames +24.3%</p>
+                    <p className="text-sm text-green-700">De "relleno" a solicitud de MÁS</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold mt-1">📈</span>
+                  <div>
+                    <p className="font-semibold text-green-900">Consigna +5.7%</p>
+                    <p className="text-sm text-green-700">Mayor claridad y mejor balance</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold mt-1">⭐</span>
+                  <div>
+                    <p className="font-semibold text-green-900">Mentores (excelencia sostenida)</p>
+                    <p className="text-sm text-green-700">El pilar inquebrantable del evento</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            {/* Regressions */}
+            <div className="bg-red-50 rounded-2xl p-6 border-2 border-red-200">
+              <div className="flex items-center gap-2 mb-4">
+                <AlertCircle className="h-6 w-6 text-red-600" />
+                <h3 className="text-xl font-bold text-red-900">Áreas de Atención</h3>
+              </div>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold mt-1">⚠️</span>
+                  <div>
+                    <p className="font-semibold text-red-900">Probabilidad de Volver -7.6%</p>
+                    <p className="text-sm text-red-700">Mayor preocupación estratégica</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold mt-1">📉</span>
+                  <div>
+                    <p className="font-semibold text-red-900">Lugar -8.3%</p>
+                    <p className="text-sm text-red-700">Ergonomía y espacios de descanso</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold mt-1">📉</span>
+                  <div>
+                    <p className="font-semibold text-red-900">Jueces -8.1%</p>
+                    <p className="text-sm text-red-700">Feedback no resuelto persistió</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Key Insights */}
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Insights Principales</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="border-l-4 border-purple-500 pl-4">
+                <h4 className="font-bold text-gray-900 mb-2">🎭 Paradoja del Crecimiento</h4>
+                <p className="text-sm text-gray-600">
+                  Satisfacción estable pero con mejoras extraordinarias (MiniGames +24%) y retrocesos preocupantes (Retorno -7.6%)
+                </p>
+              </div>
+              <div className="border-l-4 border-amber-500 pl-4">
+                <h4 className="font-bold text-gray-900 mb-2">⚠️ Costo de No Escuchar</h4>
+                <p className="text-sm text-gray-600">
+                  Feedback de jueces solicitado en Ed1, no implementado, empeoró en Ed2. No resolver pain points genera frustración acumulativa
+                </p>
+              </div>
+              <div className="border-l-4 border-green-500 pl-4">
+                <h4 className="font-bold text-gray-900 mb-2">🌟 Activo Inquebrantable</h4>
+                <p className="text-sm text-gray-600">
+                  Los mentores son el ÚNICO elemento que mantiene excelencia sostenida. Son el diferenciador clave del Picanthon
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
