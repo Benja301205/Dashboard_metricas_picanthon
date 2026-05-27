@@ -1,146 +1,165 @@
-import Link from "next/link"
+import Link from 'next/link'
 
-const CHILI = "https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
-
-const data = {
-  num: "02",
-  tag: "Segunda Edición",
-  flag: "🇺🇾",
-  date: "29 de octubre 2025",
-  location: "Montevideo, Uruguay",
-  responses: 18,
+const ED2 = {
+  num: '02',
+  nombre: 'Picanthon Uruguay',
+  pais: 'Uruguay 🇺🇾',
+  ciudad: 'Montevideo',
+  fecha: '18 de Octubre 2025',
+  total_respuestas: 18,
   nps: 4.56,
-  pct_pos: 86.1,
-  metrics: [
-    { label: "Mentores",              value: 4.89 },
-    { label: "Probabilidad de volver", value: 4.56 },
-    { label: "Consigna",              value: 4.56 },
-    { label: "Lugar",                 value: 4.33 },
-    { label: "Comida",                value: 4.28 },
-    { label: "Pitch",                 value: 4.06 },
-    { label: "Minijuegos",            value: 3.94 },
-    { label: "Jueces",                value: 3.83 },
+  metricas: [
+    { cat: 'Probabilidad de volver (NPS)', promedio: 4.56 },
+    { cat: 'Calidad de mentores',          promedio: 4.89 },
+    { cat: 'Consigna y output esperado',   promedio: 4.56 },
+    { cat: 'Calidad del lugar',            promedio: 4.33 },
+    { cat: 'Calidad de la comida',         promedio: 4.28 },
+    { cat: 'Dinámica del pitch',           promedio: 4.06 },
+    { cat: 'MiniGames',                    promedio: 3.94 },
+    { cat: 'Decisión de los jueces',       promedio: 3.83 },
   ],
-  painPoints: [
+  pain_points: [
     {
-      cat: "Duración del evento (24hs)",
+      cat: 'Duración del evento (24hs)',
       menciones: 7,
-      severidad: "Alta",
-      problema: "Las 24 horas continuas son percibidas como excesivamente largas. Fatiga física y mental que reduce la productividad especialmente durante la madrugada.",
-      impacto: "Fatiga extrema, desaprovechamiento de horas nocturnas, posibles barreras de participación para futuros asistentes.",
-      comentario: "Se hizo un poco larga, más hoy en día que se hace una app entera en la mitad del tiempo.",
+      problema: 'Las 24 horas continuas fueron percibidas como excesivamente largas. Alta fatiga física y mental, baja productividad nocturna, y barreras logísticas para participantes de otras ciudades.',
+      quote: 'Se hizo un poco larga, más hoy en día que se hace una app entera en la mitad del tiempo.',
     },
     {
-      cat: "Duración del Pitch",
+      cat: 'Duración del pitch (2 min)',
       menciones: 6,
-      severidad: "Media-Alta",
-      problema: "Los 2 minutos asignados al pitch son insuficientes para comunicar 24 horas de trabajo. Solicitud frecuente de extenderlo a 3 minutos.",
-      impacto: "Frustración en la etapa final, sensación de injusticia en la evaluación, desaprovechamiento del trabajo realizado.",
-      comentario: "El pitch fue muy corto, entiendo el fin, pero con 30s más creo que es clave.",
+      problema: 'El tiempo de 2 minutos fue percibido como insuficiente para comunicar 24 horas de trabajo. Sensación de injusticia en la evaluación final.',
+      quote: 'El pitch fue muy corto, entiendo el fin, pero con 30s más creo que es clave para el pitcher.',
     },
     {
-      cat: "Transparencia y Feedback de Jueces",
+      cat: 'Feedback de jueces',
       menciones: 3,
-      severidad: "Media-Alta",
-      problema: "Los participantes no reciben retroalimentación estructurada post-evaluación. Los criterios de evaluación son poco claros antes del evento.",
-      impacto: "Frustración en equipos no ganadores, pérdida del valor educativo, sensación de proceso arbitrario.",
-      comentario: "Me gustaría tener devolución de los jueces, para poder entender qué se hizo bien y mal (aunque sea escrito).",
+      problema: 'Los participantes no recibieron retroalimentación estructurada post-evaluación. Criterios poco claros, sensación de proceso arbitrario.',
+      quote: 'Me gustaría tener devolución de los jueces, para poder entender qué se hizo bien y mal (aunque sea escrito).',
     },
     {
-      cat: "Mobiliario y Ergonomía",
+      cat: 'Mobiliario y ergonomía',
       menciones: 3,
-      severidad: "Media",
-      problema: "Sillas inadecuadas para una jornada de 24 horas. Falta de espacios cómodos para descanso y recuperación durante el evento.",
-      impacto: "Incomodidad física progresiva que afecta la productividad y el bienestar.",
-      comentario: "Las sillas no eran lo mejor para estar trabajando 24 horas, y buscaría quizás un lugar con más sillones para dormir.",
+      problema: 'Sillas inadecuadas para jornada de 24 horas. Falta de espacios cómodos y diferenciados para descanso durante la noche.',
+      quote: 'Las sillas no eran lo mejor para estar trabajando 24 horas, y buscaría quizás un lugar con más sillones para dormir.',
     },
     {
-      cat: "Mentores Nocturnos (4–7 AM)",
+      cat: 'Mentores nocturnos',
       menciones: 3,
-      severidad: "Media",
-      problema: "Brecha de disponibilidad de mentores entre las 4 y las 7 AM. Equipos que trabajan en ese rango quedan sin soporte.",
-      impacto: "Genera inequidad en el acceso a mentorería según el horario de trabajo de cada equipo.",
-      comentario: "Entre las 4 y las 7 de la mañana no había prácticamente ningún mentor para ayudarnos.",
+      problema: 'Brecha de disponibilidad de mentores entre las 4 y las 7 AM. Genera inequidad en el acceso a soporte técnico según el turno de trabajo del equipo.',
+      quote: 'Entre las 4 y las 7 de la mañana no había prácticamente ningún mentor para ayudarnos.',
+    },
+    {
+      cat: 'Dinámicas inter-equipos',
+      menciones: 5,
+      problema: 'Poca interacción entre equipos durante el evento. Los participantes pidieron más instancias de networking y colaboración entre grupos.',
+      quote: null,
     },
   ],
-  // Completar con los comentarios finales cuando estén disponibles
-  comentarios: [
-    { cat: "Mentores", texto: "El intercambio con mentores, conocer gente picante es la herramienta más importante que ofrecieron. La predisposición de TODOS los que estaban ahí fue excelente." },
-    { cat: "Organización", texto: "Lo que más me gustó es que se nota que dejan el corazón en la organización y en que salga todo bien. Hace que estar ahí se sienta muy bien." },
-    { cat: "Mentores", texto: "Me encantó el ida y vuelta con mentores, en nuestro caso puntual, sin ellos, no llegábamos a un producto tan bueno." },
-    { cat: "Duración", texto: "Es demasiado larga y no tiene tanto sentido pudiendo vibecodear todo. Arrancamos a las 6AM para llegar a PDE y tener que pasar toda la noche sin dormir." },
+  quotes: [
+    {
+      cat: 'Mentores',
+      texto: 'El intercambio con mentores, conocer gente picante es la herramienta más importante que ofrecieron. La predisposición de TODOS los que estaban ahí, para escuchar, sugerir y cuestionar fue excelente.',
+    },
+    {
+      cat: 'Organización',
+      texto: 'Lo que más me gustó es que se nota que dejan el corazón en la organización y en que salga todo bien. Hace que estar ahí se sienta muy bien.',
+    },
+    {
+      cat: 'Duración',
+      texto: 'Es demasiado larga y no tiene tanto sentido pudiendo vibecodear todo. Arrancamos a las 6AM para llegar a PDE y tener que pasar toda la noche sin dormir.',
+    },
+    {
+      cat: 'Mentores',
+      texto: 'Me encantó el ida y vuelta con mentores, en nuestro caso puntual, sin ellos, no llegábamos a un producto tan bueno.',
+    },
   ],
 }
 
-function metricClass(v: number) {
-  if (v >= 4.5) return "great"
-  if (v >= 3.8) return "good"
-  return "low"
-}
+function fmt(n: number) { return n.toFixed(2) }
 
-export default function Edicion2() {
+function Topbar({ active }: { active: string }) {
   return (
-    <>
-      <nav className="topbar">
-        <Link href="/" className="brand">
-          <img src={CHILI} className="brand-mark-png" alt="" />
-          <span className="brand-name">Picanthon<sup>Dashboard</sup></span>
-        </Link>
-        <div />
-        <div className="topbar-nav">
-          <Link href="/picanthon/edicion-1">Ed01</Link>
-          <Link href="/picanthon/edicion-2" className="active">Ed02</Link>
-          <Link href="/picanthon/edicion-3">Ed03</Link>
-        </div>
+    <header className="topbar">
+      <a href="/" className="brand">
+        <img
+          src="https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
+          alt=""
+          aria-hidden
+          className="brand-mark-png"
+          draggable={false}
+        />
+        <span className="brand-name">Picanthon</span>
+      </a>
+      <nav className="nav">
+        <Link href="/">Dashboard</Link>
+        <Link href="/picanthon/edicion-1" className={active === 'ed1' ? 'active' : ''}>Ed 01</Link>
+        <Link href="/picanthon/edicion-2" className={active === 'ed2' ? 'active' : ''}>Ed 02</Link>
+        <Link href="/picanthon/edicion-3" className={`${active === 'ed3' ? 'active' : ''} pending`}>Ed 03</Link>
       </nav>
+    </header>
+  )
+}
 
-      <div className="dash-page">
-        <Link href="/" className="back-nav">← Dashboard</Link>
+function Footer() {
+  return (
+    <footer className="footer">
+      <span>Picanthon · Ed 02 · Uruguay · Oct 2025</span>
+      <span>{ED2.total_respuestas} respuestas</span>
+    </footer>
+  )
+}
 
-        {/* Hero */}
-        <div className="edition-hero">
-          <div>
-            <span className="edition-tag">{data.tag} · {data.flag} {data.location}</span>
-            <h1 className="edition-title">
-              Picanthon<br /><em>Uruguay</em>
-            </h1>
-            <p className="edition-sub">{data.date} · {data.responses} respuestas</p>
-          </div>
+export default function Edicion2Page() {
+  return (
+    <div className="page-wrap">
+      <Topbar active="ed2" />
 
-          <div className="nps-card">
-            <p className="nps-label">Probabilidad de volver</p>
-            <div className="nps-num">{data.nps.toFixed(2)}</div>
-            <p className="nps-sub">sobre 5.00</p>
-            <div className="nps-breakdown">
-              <div className="nps-cell">
-                <span className="nv">{data.responses}</span>
-                <span className="nl">Respuestas</span>
-              </div>
-              <div className="nps-cell pos">
-                <span className="nv">{data.pct_pos.toFixed(0)}%</span>
-                <span className="nl">Satisfacción</span>
-              </div>
-              <div className="nps-cell">
-                <span className="nv" style={{ fontSize: "15px", paddingTop: "6px" }}>Oct 2025</span>
-                <span className="nl">Fecha</span>
-              </div>
-            </div>
+      <div className="edition-page">
+        <Link href="/" className="nav-back">
+          ← Volver al dashboard
+        </Link>
+
+        {/* Header */}
+        <div className="edition-header">
+          <h1 className="edition-title">
+            Picanthon <em>02</em>
+          </h1>
+          <div className="edition-meta">
+            <div className="meta-line"><b>País</b> {ED2.pais}</div>
+            <div className="meta-line"><b>Ciudad</b> {ED2.ciudad}</div>
+            <div className="meta-line"><b>Fecha</b> {ED2.fecha}</div>
+            <div className="meta-line"><b>Respuestas</b> {ED2.total_respuestas}</div>
+            <div className="meta-line"><b>NPS (volver)</b> {fmt(ED2.nps)}/5</div>
           </div>
         </div>
 
-        {/* Metrics */}
-        <div className="section-head" style={{ marginTop: "0" }}>
+        {/* NPS */}
+        <div className="nps-card" style={{ maxWidth: 320 }}>
+          <p className="k">NPS proxy — probabilidad de volver</p>
+          <div className="big-num">
+            {fmt(ED2.nps)}
+            <small>/5</small>
+          </div>
+          <p className="verdict">Retorno probable</p>
+          <p className="note">Q1 · escala 1–5 · {ED2.total_respuestas} respuestas</p>
+        </div>
+
+        {/* Métricas por categoría */}
+        <div className="section-head">
           <h2>Métricas por <em>categoría</em></h2>
-          <span className="sn">{data.responses} respuestas</span>
+          <span className="num">{ED2.metricas.length} dimensiones</span>
         </div>
+
         <div className="metrics-grid">
-          {data.metrics.map((m, i) => (
-            <div key={i} className="metric-cell">
-              <span className="m-label">{m.label}</span>
-              <span className={`m-value ${metricClass(m.value)}`}>{m.value.toFixed(2)}</span>
-              <span className="m-unit">/ 5.00</span>
+          {ED2.metricas.map((m) => (
+            <div key={m.cat} className="metric-row">
+              <div className="m-head">
+                <span className="m-name">{m.cat}</span>
+                <span className="m-avg">{fmt(m.promedio)}<small>/5</small></span>
+              </div>
               <div className="m-bar">
-                <div className="m-bar-fill" style={{ width: `${(m.value / 5) * 100}%` }} />
+                <div className="fill" style={{ width: `${(m.promedio / 5) * 100}%` }} />
               </div>
             </div>
           ))}
@@ -148,45 +167,41 @@ export default function Edicion2() {
 
         {/* Pain Points */}
         <div className="section-head">
-          <h2>Pain <em>Points</em></h2>
-          <span className="sn">{data.painPoints.length} identificados</span>
-        </div>
-        <div className="pain-list">
-          {data.painPoints.map((p, i) => (
-            <div key={i} className="pain-item">
-              <span className="pain-n">0{i + 1}</span>
-              <div className="pain-body">
-                <span className="pain-cat">{p.cat}</span>
-                <span className="pain-count">{p.menciones} menciones · {p.severidad}</span>
-                <p className="pain-prob">{p.problema}</p>
-                <p className="pain-impact">{p.impacto}</p>
-                <blockquote className="pain-quote">“{p.comentario}”</blockquote>
-              </div>
-            </div>
-          ))}
-          <div className="pain-border-bottom" />
+          <h2>Pain <em>points</em></h2>
+          <span className="num">{ED2.pain_points.filter(p => p.quote).length} críticos · {ED2.pain_points.filter(p => !p.quote).length} secundario</span>
         </div>
 
-        {/* Comentarios */}
+        <div className="pain-grid">
+          {ED2.pain_points.map((p) => (
+            <div key={p.cat} className="pain-card">
+              <div className="pain-top">
+                <span className="pain-cat">{p.cat}</span>
+                <span className="pain-cnt">{p.menciones} menciones</span>
+              </div>
+              <p className="pain-text">{p.problema}</p>
+              {p.quote && <p className="pain-quote">"{p.quote}"</p>}
+            </div>
+          ))}
+        </div>
+
+        {/* Comentarios destacados */}
         <div className="section-head">
           <h2>Comentarios <em>destacados</em></h2>
-          <span className="sn">Ed02</span>
+          <span className="num">{ED2.quotes.length} seleccionados</span>
         </div>
-        <div className="quotes-grid">
-          {data.comentarios.map((c, i) => (
-            <div key={i} className="quote-card">
-              <span className="quote-mark">“</span>
-              <p className="quote-cat">{c.cat}</p>
-              <p className="quote-text">{c.texto}</p>
+
+        <div className="quotes">
+          {ED2.quotes.map((q, i) => (
+            <div key={i} className="quote">
+              <span className="mark" aria-hidden>"</span>
+              <p className="q-cat">{q.cat}</p>
+              <p className="q-text">{q.texto}</p>
             </div>
           ))}
         </div>
 
-        <div className="dash-footer" style={{ marginTop: "72px" }}>
-          <Link href="/" className="back-nav" style={{ marginBottom: 0 }}>← Dashboard</Link>
-          <span>Ed02 · {data.date}</span>
-        </div>
+        <Footer />
       </div>
-    </>
+    </div>
   )
 }

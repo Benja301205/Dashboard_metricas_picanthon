@@ -1,256 +1,274 @@
-import Link from "next/link"
+import Link from 'next/link'
 
-const CHILI = "https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
+// ─── Datos comparativa ────────────────────────────────────────────────────────
 
-// Cambiar LATEST_IDX a 2 cuando se carguen los datos de Ed03
-const LATEST_IDX = 1
-
-const editions = [
+const EDITIONS = [
   {
-    num: "01",
-    slug: "edicion-1",
-    tag: "Primera Edición",
-    name: "Picanthon Argentina",
-    location: "Buenos Aires, Argentina",
-    flag: "🇦🇷",
-    date: "14 jun 2025",
-    responses: 29,
+    num: '01',
+    nombre: 'Picanthon Argentina',
+    pais: 'Argentina 🇦🇷',
+    fecha: '14 Jun 2025',
+    total_respuestas: 29,
     nps: 4.93,
-    pct_pos: 86.2,
-    status: "data",
-    metrics: [
-      { label: "Probabilidad de volver", value: 4.93 },
-      { label: "Mentores",              value: 4.86 },
-      { label: "Lugar",                 value: 4.72 },
-      { label: "Consigna",              value: 4.31 },
-      { label: "Comida",                value: 4.21 },
-      { label: "Jueces",                value: 4.17 },
-      { label: "Pitch",                 value: 4.03 },
-      { label: "Minijuegos",            value: 3.17 },
-    ],
-    topPains: [
-      { cat: "Minijuegos", menciones: 9, prob: "Percibidos como actividades de relleno que desaprovechan oportunidades de networking entre participantes." },
-      { cat: "Lugar — Infraestructura", menciones: 7, prob: "Frío en el quincho, falta de espacios diferenciados para trabajo y descanso, equipos separados." },
-      { cat: "Conectividad WiFi", menciones: 5, prob: "Conexión inestable que obstaculizó el desarrollo técnico y el trabajo con APIs." },
-    ],
+    slug: 'edicion-1',
+    current: false,
+    pending: false,
+    metricas: {
+      mentores: 4.86,
+      lugar: 4.72,
+      consigna: 4.31,
+      comida: 4.21,
+      jueces: 4.17,
+      pitch: 4.03,
+      minigames: 3.17,
+    },
   },
   {
-    num: "02",
-    slug: "edicion-2",
-    tag: "Segunda Edición",
-    name: "Picanthon Uruguay",
-    location: "Montevideo, Uruguay",
-    flag: "🇺🇾",
-    date: "29 oct 2025",
-    responses: 18,
+    num: '02',
+    nombre: 'Picanthon Uruguay',
+    pais: 'Uruguay 🇺🇾',
+    fecha: '18 Oct 2025',
+    total_respuestas: 18,
     nps: 4.56,
-    pct_pos: 86.1,
-    status: "data",
-    metrics: [
-      { label: "Mentores",              value: 4.89 },
-      { label: "Probabilidad de volver", value: 4.56 },
-      { label: "Consigna",              value: 4.56 },
-      { label: "Lugar",                 value: 4.33 },
-      { label: "Comida",                value: 4.28 },
-      { label: "Pitch",                 value: 4.06 },
-      { label: "Minijuegos",            value: 3.94 },
-      { label: "Jueces",                value: 3.83 },
-    ],
-    topPains: [
-      { cat: "Duración del evento", menciones: 7, prob: "Las 24 horas continuas son percibidas como excesivamente largas, generando fatiga que reduce la productividad nocturna." },
-      { cat: "Duración del pitch", menciones: 6, prob: "2 minutos insuficientes para comunicar 24 horas de trabajo. Solicitud recurrente de 3 minutos." },
-      { cat: "Transparencia de jueces", menciones: 3, prob: "Sin retroalimentación estructurada post-evaluación. Criterios de evaluación poco claros." },
-    ],
+    slug: 'edicion-2',
+    current: true,
+    pending: false,
+    metricas: {
+      mentores: 4.89,
+      lugar: 4.33,
+      consigna: 4.56,
+      comida: 4.28,
+      jueces: 3.83,
+      pitch: 4.06,
+      minigames: 3.94,
+    },
   },
   {
-    num: "03",
-    slug: "edicion-3",
-    tag: "Tercera Edición",
-    name: "Picanthon",
-    location: "—",
-    flag: "🔜",
-    date: "2026",
-    responses: null,
+    num: '03',
+    nombre: 'Picanthon 03',
+    pais: '—',
+    fecha: 'Mayo 2026',
+    total_respuestas: null,
     nps: null,
-    pct_pos: null,
-    status: "pending",
-    metrics: [],
-    topPains: [],
+    slug: 'edicion-3',
+    current: false,
+    pending: true,
+    metricas: {
+      mentores: null,
+      lugar: null,
+      consigna: null,
+      comida: null,
+      jueces: null,
+      pitch: null,
+      minigames: null,
+    },
   },
 ]
 
-const comparativa = [
-  { label: "Probabilidad de volver", ed1: 4.93, ed2: 4.56, note: null },
-  { label: "Mentores",               ed1: 4.86, ed2: 4.89, note: null },
-  { label: "Lugar",                  ed1: 4.72, ed2: 4.33, note: null },
-  { label: "Consigna",               ed1: 4.31, ed2: 4.56, note: null },
-  { label: "Comida",                 ed1: 4.21, ed2: 4.28, note: null },
-  { label: "Pitch",                  ed1: 4.03, ed2: 4.06, note: null },
-  { label: "Jueces",                 ed1: 4.17, ed2: 3.83, note: null },
-  { label: "Minijuegos",             ed1: 3.17, ed2: 3.94, note: "Ed03 no incluye minijuegos" },
+const ULTIMA = EDITIONS[1] // Ed02 es la última con datos
+
+const METRICAS_COMP = [
+  { key: 'nps',       label: 'Probabilidad de volver (NPS)',  ed1: 4.93, ed2: 4.56 },
+  { key: 'mentores',  label: 'Calidad de mentores',           ed1: 4.86, ed2: 4.89 },
+  { key: 'lugar',     label: 'Calidad del lugar',             ed1: 4.72, ed2: 4.33 },
+  { key: 'consigna',  label: 'Consigna y output esperado',    ed1: 4.31, ed2: 4.56 },
+  { key: 'comida',    label: 'Calidad de la comida',          ed1: 4.21, ed2: 4.28 },
+  { key: 'pitch',     label: 'Dinámica del pitch',            ed1: 4.03, ed2: 4.06 },
+  { key: 'jueces',    label: 'Decisión de los jueces',        ed1: 4.17, ed2: 3.83 },
+  { key: 'minigames', label: 'MiniGames',                    ed1: 3.17, ed2: 3.94 },
 ]
 
-function metricClass(v: number) {
-  if (v >= 4.5) return "great"
-  if (v >= 3.8) return "good"
-  return "low"
-}
-
-function Delta({ a, b }: { a: number; b: number }) {
+function fmt(n: number) { return n.toFixed(2) }
+function delta(a: number, b: number) {
   const d = b - a
-  if (Math.abs(d) < 0.005) return <span className="d-flat">±0.00</span>
-  return <span className={d > 0 ? "d-up" : "d-down"}>{d > 0 ? "+" : ""}{d.toFixed(2)}</span>
+  const sign = d > 0 ? '+' : ''
+  return { text: `${sign}${d.toFixed(2)}`, up: d > 0 }
 }
 
-export default function Home() {
-  const latest = editions[LATEST_IDX]
+function Topbar({ active }: { active: string }) {
+  return (
+    <header className="topbar">
+      <a href="/" className="brand">
+        <img
+          src="https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
+          alt=""
+          aria-hidden
+          className="brand-mark-png"
+          draggable={false}
+        />
+        <span className="brand-name">Picanthon</span>
+      </a>
+      <nav className="nav">
+        <Link href="/" className={active === 'home' ? 'active' : ''}>Dashboard</Link>
+        <Link href="/picanthon/edicion-1" className={active === 'ed1' ? 'active' : ''}>Ed 01</Link>
+        <Link href="/picanthon/edicion-2" className={active === 'ed2' ? 'active' : ''}>Ed 02</Link>
+        <Link href="/picanthon/edicion-3" className={`${active === 'ed3' ? 'active' : ''} pending`}>Ed 03</Link>
+      </nav>
+    </header>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <span>Picanthon · Métricas internas · 2025–2026</span>
+      <span>3 ediciones · {29 + 18} respuestas totales</span>
+    </footer>
+  )
+}
+
+export default function HomePage() {
+  const heroMetrics = [
+    { label: 'Mentores',     val: ULTIMA.metricas.mentores! },
+    { label: 'Lugar',        val: ULTIMA.metricas.lugar! },
+    { label: 'Consigna',     val: ULTIMA.metricas.consigna! },
+    { label: 'Comida',       val: ULTIMA.metricas.comida! },
+    { label: 'Pitch',        val: ULTIMA.metricas.pitch! },
+    { label: 'Jueces',       val: ULTIMA.metricas.jueces! },
+    { label: 'MiniGames',    val: ULTIMA.metricas.minigames! },
+  ]
 
   return (
-    <>
-      <nav className="topbar">
-        <Link href="/" className="brand">
-          <img src={CHILI} className="brand-mark-png" alt="" />
-          <span className="brand-name">Picanthon<sup>Dashboard</sup></span>
-        </Link>
-        <div />
-        <div className="topbar-nav">
-          <Link href="/picanthon/edicion-1">Ed01</Link>
-          <Link href="/picanthon/edicion-2">Ed02</Link>
-          <Link href="/picanthon/edicion-3">Ed03</Link>
-        </div>
-      </nav>
+    <div className="page-wrap">
+      <Topbar active="home" />
 
       <div className="dash-page">
 
-        {/* Latest edition hero */}
-        <div className="edition-hero" style={{ marginTop: "8px" }}>
-          <div>
-            <span className="edition-tag">Última edición con datos</span>
-            <h1 className="edition-title">
-              Picanthon<br /><em>{latest.flag} {latest.name.replace("Picanthon ", "")}</em>
-            </h1>
-            <p className="edition-sub">{latest.date} · {latest.location}</p>
+        {/* Rail */}
+        <div className="dash-rail">
+          <span className="rail-txt">Dashboard · Organizadores · Picanthon</span>
+          <span className="rail-txt">2025 – 2026</span>
+        </div>
+
+        {/* ── ÚLTIMA EDICIÓN HERO ───────────────────────────────────── */}
+        <section className="last-edition-hero">
+          <div className="last-edition-eyebrow">
+            <span className="dot" />
+            <span className="txt">Última edición con datos</span>
           </div>
 
-          <div className="nps-card">
-            <p className="nps-label">Probabilidad de volver</p>
-            <div className="nps-num">{latest.nps!.toFixed(2)}</div>
-            <p className="nps-sub">sobre 5.00</p>
-            <div className="nps-breakdown">
-              <div className="nps-cell">
-                <span className="nv">{latest.responses}</span>
-                <span className="nl">Respuestas</span>
-              </div>
-              <div className="nps-cell pos">
-                <span className="nv">{latest.pct_pos!.toFixed(0)}%</span>
-                <span className="nl">Satisfacción</span>
-              </div>
-              <div className="nps-cell">
-                <span className="nv" style={{ fontSize: "15px", paddingTop: "6px" }}>{latest.date}</span>
-                <span className="nl">Fecha</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          <h1 className="last-edition-title">
+            Picanthon <em>02</em>
+          </h1>
+          <p className="last-edition-sub">
+            Uruguay 🇺🇾 · 18 Oct 2025 · {ULTIMA.total_respuestas} respuestas
+          </p>
 
-        {/* Metrics */}
-        <div className="section-head" style={{ marginTop: "0" }}>
-          <h2>Métricas por <em>categoría</em></h2>
-          <span className="sn">{latest.tag} · {latest.responses} respuestas</span>
-        </div>
-        <div className="metrics-grid">
-          {latest.metrics.map((m, i) => (
-            <div key={i} className="metric-cell">
-              <span className="m-label">{m.label}</span>
-              <span className={`m-value ${metricClass(m.value)}`}>{m.value.toFixed(2)}</span>
-              <span className="m-unit">/ 5.00</span>
-              <div className="m-bar">
-                <div className="m-bar-fill" style={{ width: `${(m.value / 5) * 100}%` }} />
+          <div className="last-edition-grid">
+            {/* NPS Card */}
+            <div className="nps-card">
+              <p className="k">NPS proxy — probabilidad de volver</p>
+              <div className="big-num">
+                {fmt(ULTIMA.nps!)}
+                <small>/5</small>
               </div>
+              <p className="verdict">Retorno probable</p>
+              <p className="note">Escala 1–5 · pregunta Q1</p>
+              <p className="resp-count">
+                Respuestas: <b>{ULTIMA.total_respuestas}</b>
+              </p>
             </div>
-          ))}
-        </div>
 
-        {/* Pain Points */}
-        <div className="section-head">
-          <h2>Pain <em>Points</em></h2>
-          <span className="sn">{latest.tag}</span>
-        </div>
-        <div className="pain-list">
-          {latest.topPains.map((p, i) => (
-            <div key={i} className="pain-item">
-              <span className="pain-n">0{i + 1}</span>
-              <div className="pain-body">
-                <span className="pain-cat">{p.cat}</span>
-                <span className="pain-count">{p.menciones} menciones</span>
-                <p className="pain-prob">{p.prob}</p>
-              </div>
-            </div>
-          ))}
-          <div className="pain-border-bottom" />
-        </div>
-
-        {/* Comparativa */}
-        <div className="section-head">
-          <h2>Comparativa <em>histórica</em></h2>
-          <span className="sn">3 ediciones</span>
-        </div>
-        <div className="comp-wrap">
-          <table className="comp-table">
-            <thead>
-              <tr>
-                <th>Métrica</th>
-                <th className="tc">Ed01 🇦🇷</th>
-                <th className="tc">Ed02 🇺🇾</th>
-                <th className="tc">Δ Ed01→02</th>
-                <th className="tc">Ed03 🔜</th>
-              </tr>
-            </thead>
-            <tbody>
-              {comparativa.map((row, i) => (
-                <tr key={i}>
-                  <td className="tname">
-                    {row.label}
-                    {row.note && <span className="tnote">{row.note}</span>}
-                  </td>
-                  <td className="tval">{row.ed1.toFixed(2)}</td>
-                  <td className="tval">{row.ed2.toFixed(2)}</td>
-                  <td className="tdelta"><Delta a={row.ed1} b={row.ed2} /></td>
-                  <td className="tval tpend">Pendiente</td>
-                </tr>
+            {/* Metrics mini-list */}
+            <div className="hero-metrics">
+              {heroMetrics.map((m) => (
+                <div key={m.label} className="hero-metric-row">
+                  <span className="cat">{m.label}</span>
+                  <div className="bar-col">
+                    <div className="hero-bar">
+                      <div className="fill" style={{ width: `${(m.val / 5) * 100}%` }} />
+                    </div>
+                  </div>
+                  <span className="val">
+                    {fmt(m.val)}<small>/5</small>
+                  </span>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
+        </section>
+
+        {/* ── COMPARATIVA ──────────────────────────────────────────── */}
+        <section>
+          <div className="section-head">
+            <h2>Comparativa <em>ediciones</em></h2>
+            <span className="num">Ed 01 · Ed 02 · Ed 03</span>
+          </div>
+
+          <div className="comp-wrap">
+            <table className="comp-table">
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th>Ed 01 🇦🇷</th>
+                  <th>Ed 02 🇺🇾</th>
+                  <th>Δ 01→02</th>
+                  <th>Ed 03</th>
+                </tr>
+              </thead>
+              <tbody>
+                {METRICAS_COMP.map((m) => {
+                  const d = delta(m.ed1, m.ed2)
+                  const isMinigames = m.key === 'minigames'
+                  return (
+                    <tr key={m.key}>
+                      <td className="m-name">{m.label}</td>
+                      <td className="m-val">{fmt(m.ed1)}</td>
+                      <td className="m-val">{fmt(m.ed2)}</td>
+                      <td className={`delta ${d.up ? 'delta-up' : 'delta-down'}`}>
+                        {d.text}
+                      </td>
+                      <td className={`m-val ${isMinigames ? 'na' : 'pending'}`}>
+                        {isMinigames ? 'N/A · sin minigames' : '—'}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="comp-note">
+            ⚠ Ed 03 — No se realizaron MiniGames en esta edición. La métrica queda excluida de la comparativa.
+          </div>
+        </section>
+
+        {/* ── NAVEGACIÓN POR EDICIÓN ───────────────────────────────── */}
+        <div className="section-head" style={{ marginTop: 72 }}>
+          <h2>Ver <em>edición</em></h2>
+          <span className="num">Zoom por edición</span>
         </div>
 
-        {/* Edition nav */}
-        <div className="section-head">
-          <h2>Todas las <em>ediciones</em></h2>
-        </div>
-        <div className="edition-nav">
-          {editions.map((ed, i) => (
+        <div className="edition-cards">
+          {EDITIONS.map((ed) => (
             <Link
-              key={ed.slug}
+              key={ed.num}
               href={`/picanthon/${ed.slug}`}
-              className={`ed-card${
-                i === LATEST_IDX ? " ed-current" : ""
-              }${ed.status === "pending" ? " ed-pending" : ""}`}
+              className={`edition-card ${ed.current ? 'current' : ''} ${ed.pending ? 'pending' : ''}`}
             >
+              <span className="arrow">→</span>
+              <span className="ed-eyebrow">
+                {ed.current ? '● Última con datos' : ed.pending ? '○ Pendiente' : 'Edición'}
+              </span>
               <span className="ed-num">{ed.num}</span>
-              <span className="ed-tag">{ed.tag}</span>
-              <span className="ed-name">{ed.name} {ed.flag}</span>
-              <span className="ed-date">{ed.date}</span>
-              {ed.status !== "pending" && <span className="ed-arrow">→</span>}
+              <span className="ed-name">{ed.nombre}</span>
+              <span className="ed-date">{ed.pais} · {ed.fecha}</span>
+              <div className="ed-nps-row">
+                {ed.nps !== null ? (
+                  <>
+                    <span className="ed-nps-val">{fmt(ed.nps)}<small style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-faint)', marginLeft: 4 }}>/5</small></span>
+                    <span className="ed-nps-lbl">NPS</span>
+                  </>
+                ) : (
+                  <span className="ed-nps-val">Datos pendientes</span>
+                )}
+              </div>
             </Link>
           ))}
         </div>
 
-        <div className="dash-footer" style={{ marginTop: "64px" }}>
-          <span>Picanthon Dashboard</span>
-          <span>Última actualización: {latest.date}</span>
-        </div>
-
+        <Footer />
       </div>
-    </>
+    </div>
   )
 }

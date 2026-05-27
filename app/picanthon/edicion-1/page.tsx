@@ -1,139 +1,144 @@
-import Link from "next/link"
+import Link from 'next/link'
 
-const CHILI = "https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
-
-const data = {
-  num: "01",
-  tag: "Primera Edición",
-  titleLine2: "Argentina",
-  flag: "🇦🇷",
-  date: "14 de junio 2025",
-  location: "Buenos Aires, Argentina",
-  responses: 29,
+const ED1 = {
+  num: '01',
+  nombre: 'Picanthon Argentina',
+  pais: 'Argentina 🇦🇷',
+  ciudad: 'Buenos Aires',
+  fecha: '14 de Junio 2025',
+  total_respuestas: 29,
   nps: 4.93,
-  pct_pos: 86.2,
-  metrics: [
-    { label: "Probabilidad de volver", value: 4.93 },
-    { label: "Mentores",              value: 4.86 },
-    { label: "Lugar",                 value: 4.72 },
-    { label: "Consigna",              value: 4.31 },
-    { label: "Comida",                value: 4.21 },
-    { label: "Jueces",                value: 4.17 },
-    { label: "Pitch",                 value: 4.03 },
-    { label: "Minijuegos",            value: 3.17 },
+  metricas: [
+    { cat: 'Probabilidad de volver (NPS)', promedio: 4.93 },
+    { cat: 'Calidad de mentores',          promedio: 4.86 },
+    { cat: 'Calidad del lugar',            promedio: 4.72 },
+    { cat: 'Consigna y output esperado',   promedio: 4.31 },
+    { cat: 'Calidad de la comida',         promedio: 4.21 },
+    { cat: 'Decisión de los jueces',       promedio: 4.17 },
+    { cat: 'Dinámica del pitch',           promedio: 4.03 },
+    { cat: 'MiniGames',                    promedio: 3.17 },
   ],
-  painPoints: [
+  pain_points: [
     {
-      cat: "Minijuegos",
+      cat: 'Minigames',
       menciones: 9,
-      severidad: "Moderada-Alta",
-      problema: "Percibidos como actividades de relleno con baja calidad, desaprovechando las oportunidades de networking entre participantes.",
-      impacto: "Reducción del engagement y oportunidades perdidas de conexión entre equipos.",
-      comentario: "Lo que menos me gustaron fueron los minijuegos, siento estaban muy de relleno, quizás unos minigames para que se pueda interactuar con otros participantes sea mejor.",
+      problema: 'Percibidos como actividades de relleno, sin valor real para los participantes. Baja calidad y desconectados de la dinámica del hackathon.',
+      quote: 'Lo que menos me gustaron fueron los minijuegos, siento estaban muy de relleno, quizás unos minigames para que se pueda interactuar con otros participantes sea mejor.',
     },
     {
-      cat: "Lugar — Infraestructura",
+      cat: 'Lugar — Infraestructura',
       menciones: 7,
-      severidad: "Moderada",
-      problema: "Frío en el quincho, falta de espacios diferenciados para trabajo técnico y zonas de descanso. Equipos ubicados en sectores separados del venue.",
-      impacto: "Incomodidad durante el desarrollo, ambiente no óptimo para trabajo técnico sostenido.",
-      comentario: "Agregaría un lugar que tenga una parte para trabajar de forma más cómoda y otra que sea para estar más chill y descansar si se quiere.",
+      problema: 'Frío en el quincho, falta de espacios diferenciados para trabajo intensivo y descanso, y exclusión de algunos equipos de zonas cómodas.',
+      quote: 'Agregaría un lugar que tenga una parte para trabajar de forma más cómoda y otra que sea para estar más chill y descansar si se quiere.',
     },
     {
-      cat: "Conectividad WiFi",
+      cat: 'Conectividad',
       menciones: 5,
-      severidad: "Alta",
-      problema: "Conexión WiFi deficiente e inestable que obstaculizó el trabajo técnico, especialmente con APIs y servicios en la nube.",
-      impacto: "Obstaculiza directamente el desarrollo técnico y reduce la productividad de los equipos.",
-      comentario: "WiFi inestable dificultó el trabajo con APIs.",
+      problema: 'Conexión WiFi deficiente e inestable durante el evento. Obstaculizó el desarrollo técnico y el trabajo con APIs externas.',
+      quote: 'WiFi inestable dificultó el trabajo con APIs.',
     },
     {
-      cat: "Jueces — Transparencia",
+      cat: 'Jueces — Transparencia',
       menciones: 4,
-      severidad: "Moderada",
-      problema: "Falta de claridad en los criterios de evaluación y feedback insuficiente luego del pitch.",
-      impacto: "Incertidumbre en los equipos sobre qué mejorar, sensación de proceso arbitrario.",
-      comentario: "Devolución de los jueces y cómo pensaron la votación.",
+      problema: 'Falta de claridad en los criterios de evaluación y feedback insuficiente post-pitch. Los equipos no supieron en qué mejorar.',
+      quote: 'Devolución de los jueces y cómo pensaron la votación. Más feedback de las decisiones post pitch.',
     },
   ],
-  // Completar con los comentarios finales cuando estén disponibles
-  comentarios: [
-    { cat: "Mentores", texto: "Excelente la energía y la buena onda de todos los mentores, la verdad que ayudó a que todo sea una experiencia increíble." },
-    { cat: "Lugar", texto: "El lugar estuvo muy bien, cómodo para trabajar." },
-    { cat: "Jueces", texto: "Los jueces unos copados como ayudaban al igual que los mentores." },
-    { cat: "Minijuegos", texto: "Lo que menos me gustaron fueron los minijuegos, siento estaban muy de relleno." },
+  quotes: [
+    {
+      cat: 'Mentores',
+      texto: 'Excelente la energía y la buena onda de todos los mentores, la verdad que ayudó a que todo sea una experiencia increíble.',
+    },
+    {
+      cat: 'Minigames',
+      texto: 'Lo que menos me gustaron fueron los minijuegos, siento estaban muy de relleno, quizás unos minigames para que se pueda interactuar con otros participantes sea mejor.',
+    },
   ],
 }
 
-function metricClass(v: number) {
-  if (v >= 4.5) return "great"
-  if (v >= 3.8) return "good"
-  return "low"
+function fmt(n: number) { return n.toFixed(2) }
+
+function Topbar({ active }: { active: string }) {
+  return (
+    <header className="topbar">
+      <a href="/" className="brand">
+        <img
+          src="https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
+          alt=""
+          aria-hidden
+          className="brand-mark-png"
+          draggable={false}
+        />
+        <span className="brand-name">Picanthon</span>
+      </a>
+      <nav className="nav">
+        <Link href="/">Dashboard</Link>
+        <Link href="/picanthon/edicion-1" className={active === 'ed1' ? 'active' : ''}>Ed 01</Link>
+        <Link href="/picanthon/edicion-2" className={active === 'ed2' ? 'active' : ''}>Ed 02</Link>
+        <Link href="/picanthon/edicion-3" className={`${active === 'ed3' ? 'active' : ''} pending`}>Ed 03</Link>
+      </nav>
+    </header>
+  )
 }
 
-export default function Edicion1() {
+function Footer() {
   return (
-    <>
-      <nav className="topbar">
-        <Link href="/" className="brand">
-          <img src={CHILI} className="brand-mark-png" alt="" />
-          <span className="brand-name">Picanthon<sup>Dashboard</sup></span>
+    <footer className="footer">
+      <span>Picanthon · Ed 01 · Argentina · Jun 2025</span>
+      <span>{ED1.total_respuestas} respuestas</span>
+    </footer>
+  )
+}
+
+export default function Edicion1Page() {
+  return (
+    <div className="page-wrap">
+      <Topbar active="ed1" />
+
+      <div className="edition-page">
+        <Link href="/" className="nav-back">
+          ← Volver al dashboard
         </Link>
-        <div />
-        <div className="topbar-nav">
-          <Link href="/picanthon/edicion-1" className="active">Ed01</Link>
-          <Link href="/picanthon/edicion-2">Ed02</Link>
-          <Link href="/picanthon/edicion-3">Ed03</Link>
-        </div>
-      </nav>
 
-      <div className="dash-page">
-        <Link href="/" className="back-nav">← Dashboard</Link>
-
-        {/* Hero */}
-        <div className="edition-hero">
-          <div>
-            <span className="edition-tag">{data.tag} · {data.flag} {data.location}</span>
-            <h1 className="edition-title">
-              Picanthon<br /><em>Argentina</em>
-            </h1>
-            <p className="edition-sub">{data.date} · {data.responses} respuestas</p>
-          </div>
-
-          <div className="nps-card">
-            <p className="nps-label">Probabilidad de volver</p>
-            <div className="nps-num">{data.nps.toFixed(2)}</div>
-            <p className="nps-sub">sobre 5.00</p>
-            <div className="nps-breakdown">
-              <div className="nps-cell">
-                <span className="nv">{data.responses}</span>
-                <span className="nl">Respuestas</span>
-              </div>
-              <div className="nps-cell pos">
-                <span className="nv">{data.pct_pos.toFixed(0)}%</span>
-                <span className="nl">Satisfacción</span>
-              </div>
-              <div className="nps-cell">
-                <span className="nv" style={{ fontSize: "15px", paddingTop: "6px" }}>Jun 2025</span>
-                <span className="nl">Fecha</span>
-              </div>
-            </div>
+        {/* Header */}
+        <div className="edition-header">
+          <h1 className="edition-title">
+            Picanthon <em>01</em>
+          </h1>
+          <div className="edition-meta">
+            <div className="meta-line"><b>País</b> {ED1.pais}</div>
+            <div className="meta-line"><b>Fecha</b> {ED1.fecha}</div>
+            <div className="meta-line"><b>Respuestas</b> {ED1.total_respuestas}</div>
+            <div className="meta-line"><b>NPS (volver)</b> {fmt(ED1.nps)}/5</div>
           </div>
         </div>
 
-        {/* Metrics */}
-        <div className="section-head" style={{ marginTop: "0" }}>
+        {/* NPS */}
+        <div className="nps-card" style={{ maxWidth: 320 }}>
+          <p className="k">NPS proxy — probabilidad de volver</p>
+          <div className="big-num">
+            {fmt(ED1.nps)}
+            <small>/5</small>
+          </div>
+          <p className="verdict">Retorno muy alto</p>
+          <p className="note">Q1 · escala 1–5 · {ED1.total_respuestas} respuestas</p>
+        </div>
+
+        {/* Métricas por categoría */}
+        <div className="section-head">
           <h2>Métricas por <em>categoría</em></h2>
-          <span className="sn">{data.responses} respuestas</span>
+          <span className="num">{ED1.metricas.length} dimensiones</span>
         </div>
+
         <div className="metrics-grid">
-          {data.metrics.map((m, i) => (
-            <div key={i} className="metric-cell">
-              <span className="m-label">{m.label}</span>
-              <span className={`m-value ${metricClass(m.value)}`}>{m.value.toFixed(2)}</span>
-              <span className="m-unit">/ 5.00</span>
+          {ED1.metricas.map((m) => (
+            <div key={m.cat} className="metric-row">
+              <div className="m-head">
+                <span className="m-name">{m.cat}</span>
+                <span className="m-avg">{fmt(m.promedio)}<small>/5</small></span>
+              </div>
               <div className="m-bar">
-                <div className="m-bar-fill" style={{ width: `${(m.value / 5) * 100}%` }} />
+                <div className="fill" style={{ width: `${(m.promedio / 5) * 100}%` }} />
               </div>
             </div>
           ))}
@@ -141,45 +146,41 @@ export default function Edicion1() {
 
         {/* Pain Points */}
         <div className="section-head">
-          <h2>Pain <em>Points</em></h2>
-          <span className="sn">{data.painPoints.length} identificados</span>
-        </div>
-        <div className="pain-list">
-          {data.painPoints.map((p, i) => (
-            <div key={i} className="pain-item">
-              <span className="pain-n">0{i + 1}</span>
-              <div className="pain-body">
-                <span className="pain-cat">{p.cat}</span>
-                <span className="pain-count">{p.menciones} menciones · {p.severidad}</span>
-                <p className="pain-prob">{p.problema}</p>
-                <p className="pain-impact">{p.impacto}</p>
-                <blockquote className="pain-quote">“{p.comentario}”</blockquote>
-              </div>
-            </div>
-          ))}
-          <div className="pain-border-bottom" />
+          <h2>Pain <em>points</em></h2>
+          <span className="num">{ED1.pain_points.length} críticos</span>
         </div>
 
-        {/* Comentarios */}
+        <div className="pain-grid">
+          {ED1.pain_points.map((p) => (
+            <div key={p.cat} className="pain-card">
+              <div className="pain-top">
+                <span className="pain-cat">{p.cat}</span>
+                <span className="pain-cnt">{p.menciones} menciones</span>
+              </div>
+              <p className="pain-text">{p.problema}</p>
+              <p className="pain-quote">"{p.quote}"</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Comentarios destacados */}
         <div className="section-head">
           <h2>Comentarios <em>destacados</em></h2>
-          <span className="sn">Ed01</span>
+          <span className="num">{ED1.quotes.length} seleccionados</span>
         </div>
-        <div className="quotes-grid">
-          {data.comentarios.map((c, i) => (
-            <div key={i} className="quote-card">
-              <span className="quote-mark">“</span>
-              <p className="quote-cat">{c.cat}</p>
-              <p className="quote-text">{c.texto}</p>
+
+        <div className="quotes">
+          {ED1.quotes.map((q, i) => (
+            <div key={i} className="quote">
+              <span className="mark" aria-hidden>"</span>
+              <p className="q-cat">{q.cat}</p>
+              <p className="q-text">{q.texto}</p>
             </div>
           ))}
         </div>
 
-        <div className="dash-footer" style={{ marginTop: "72px" }}>
-          <Link href="/" className="back-nav" style={{ marginBottom: 0 }}>← Dashboard</Link>
-          <span>Ed01 · {data.date}</span>
-        </div>
+        <Footer />
       </div>
-    </>
+    </div>
   )
 }
