@@ -1,356 +1,256 @@
 import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { TrendingUp, MessageSquare, BarChart3, Sparkles, ArrowRight, Calendar, MapPin, AlertCircle } from "lucide-react"
 
-export default function AlertlyHome() {
+const CHILI = "https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
+
+// Cambiar LATEST_IDX a 2 cuando se carguen los datos de Ed03
+const LATEST_IDX = 1
+
+const editions = [
+  {
+    num: "01",
+    slug: "edicion-1",
+    tag: "Primera Edición",
+    name: "Picanthon Argentina",
+    location: "Buenos Aires, Argentina",
+    flag: "🇦🇷",
+    date: "14 jun 2025",
+    responses: 29,
+    nps: 4.93,
+    pct_pos: 86.2,
+    status: "data",
+    metrics: [
+      { label: "Probabilidad de volver", value: 4.93 },
+      { label: "Mentores",              value: 4.86 },
+      { label: "Lugar",                 value: 4.72 },
+      { label: "Consigna",              value: 4.31 },
+      { label: "Comida",                value: 4.21 },
+      { label: "Jueces",                value: 4.17 },
+      { label: "Pitch",                 value: 4.03 },
+      { label: "Minijuegos",            value: 3.17 },
+    ],
+    topPains: [
+      { cat: "Minijuegos", menciones: 9, prob: "Percibidos como actividades de relleno que desaprovechan oportunidades de networking entre participantes." },
+      { cat: "Lugar — Infraestructura", menciones: 7, prob: "Frío en el quincho, falta de espacios diferenciados para trabajo y descanso, equipos separados." },
+      { cat: "Conectividad WiFi", menciones: 5, prob: "Conexión inestable que obstaculizó el desarrollo técnico y el trabajo con APIs." },
+    ],
+  },
+  {
+    num: "02",
+    slug: "edicion-2",
+    tag: "Segunda Edición",
+    name: "Picanthon Uruguay",
+    location: "Montevideo, Uruguay",
+    flag: "🇺🇾",
+    date: "29 oct 2025",
+    responses: 18,
+    nps: 4.56,
+    pct_pos: 86.1,
+    status: "data",
+    metrics: [
+      { label: "Mentores",              value: 4.89 },
+      { label: "Probabilidad de volver", value: 4.56 },
+      { label: "Consigna",              value: 4.56 },
+      { label: "Lugar",                 value: 4.33 },
+      { label: "Comida",                value: 4.28 },
+      { label: "Pitch",                 value: 4.06 },
+      { label: "Minijuegos",            value: 3.94 },
+      { label: "Jueces",                value: 3.83 },
+    ],
+    topPains: [
+      { cat: "Duración del evento", menciones: 7, prob: "Las 24 horas continuas son percibidas como excesivamente largas, generando fatiga que reduce la productividad nocturna." },
+      { cat: "Duración del pitch", menciones: 6, prob: "2 minutos insuficientes para comunicar 24 horas de trabajo. Solicitud recurrente de 3 minutos." },
+      { cat: "Transparencia de jueces", menciones: 3, prob: "Sin retroalimentación estructurada post-evaluación. Criterios de evaluación poco claros." },
+    ],
+  },
+  {
+    num: "03",
+    slug: "edicion-3",
+    tag: "Tercera Edición",
+    name: "Picanthon",
+    location: "—",
+    flag: "🔜",
+    date: "2026",
+    responses: null,
+    nps: null,
+    pct_pos: null,
+    status: "pending",
+    metrics: [],
+    topPains: [],
+  },
+]
+
+const comparativa = [
+  { label: "Probabilidad de volver", ed1: 4.93, ed2: 4.56, note: null },
+  { label: "Mentores",               ed1: 4.86, ed2: 4.89, note: null },
+  { label: "Lugar",                  ed1: 4.72, ed2: 4.33, note: null },
+  { label: "Consigna",               ed1: 4.31, ed2: 4.56, note: null },
+  { label: "Comida",                 ed1: 4.21, ed2: 4.28, note: null },
+  { label: "Pitch",                  ed1: 4.03, ed2: 4.06, note: null },
+  { label: "Jueces",                 ed1: 4.17, ed2: 3.83, note: null },
+  { label: "Minijuegos",             ed1: 3.17, ed2: 3.94, note: "Ed03 no incluye minijuegos" },
+]
+
+function metricClass(v: number) {
+  if (v >= 4.5) return "great"
+  if (v >= 3.8) return "good"
+  return "low"
+}
+
+function Delta({ a, b }: { a: number; b: number }) {
+  const d = b - a
+  if (Math.abs(d) < 0.005) return <span className="d-flat">±0.00</span>
+  return <span className={d > 0 ? "d-up" : "d-down"}>{d > 0 ? "+" : ""}{d.toFixed(2)}</span>
+}
+
+export default function Home() {
+  const latest = editions[LATEST_IDX]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
-      {/* Hero Section */}
-      <header className="container mx-auto px-6 pt-16 pb-12">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-2xl shadow-lg">
-              <MessageSquare className="h-12 w-12" />
-            </div>
-          </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Alertly
-            </span>
-          </h1>
-          <p className="text-2xl text-gray-700 mb-4 font-medium">
-            El oído inteligente que escucha a tus clientes
-          </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Transformamos feedback y encuestas en insights accionables usando inteligencia artificial.
-            Detectamos automáticamente qué funciona, qué necesita mejorar y qué quieren tus clientes.
-          </p>
+    <>
+      <nav className="topbar">
+        <Link href="/" className="brand">
+          <img src={CHILI} className="brand-mark-png" alt="" />
+          <span className="brand-name">Picanthon<sup>Dashboard</sup></span>
+        </Link>
+        <div />
+        <div className="topbar-nav">
+          <Link href="/picanthon/edicion-1">Ed01</Link>
+          <Link href="/picanthon/edicion-2">Ed02</Link>
+          <Link href="/picanthon/edicion-3">Ed03</Link>
         </div>
-      </header>
+      </nav>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <Card className="border-2 border-purple-200 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                <Sparkles className="h-6 w-6 text-purple-600" />
-              </div>
-              <CardTitle className="text-xl">Análisis Automático</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Procesamos miles de comentarios y detectamos patrones, sentimientos y tendencias en segundos.
-              </p>
-            </CardContent>
-          </Card>
+      <div className="dash-page">
 
-          <Card className="border-2 border-blue-200 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                <TrendingUp className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-xl">Insights Accionables</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Identificamos problemas críticos y oportunidades de mejora con recomendaciones claras y priorizadas.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-pink-200 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <div className="bg-pink-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                <BarChart3 className="h-6 w-6 text-pink-600" />
-              </div>
-              <CardTitle className="text-xl">Visualización Clara</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Dashboards interactivos que muestran métricas clave, tendencias y comparaciones de forma visual.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Case Study Header */}
-        <div className="text-center mb-12">
-          <Badge className="mb-4 text-sm px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600">
-            Casos de Análisis
-          </Badge>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            Análisis de Feedback: Picanthon
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Analizamos el feedback de las ediciones de Picanthon, la hackathon organizada por Picante,
-            para ayudarles a entender qué funcionó y cómo mejorar futuras ediciones.
-          </p>
-        </div>
-
-        {/* Picanthon Editions Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Edición 1 */}
-          <Link href="/picanthon/edicion-1">
-            <Card className="h-full border-2 border-green-200 hover:border-green-400 hover:shadow-2xl transition-all cursor-pointer group">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                    Primera Edición
-                  </Badge>
-                  <Calendar className="h-5 w-5 text-gray-400" />
-                </div>
-                <CardTitle className="text-2xl group-hover:text-green-600 transition-colors">
-                  Picanthon 2025 🇦🇷
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Primera edición - 14 de junio 2025 - Argentina
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="h-4 w-4 mr-2 text-green-600" />
-                    Argentina 🇦🇷
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <BarChart3 className="h-4 w-4 mr-2 text-green-600" />
-                    29 respuestas analizadas
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
-                    Sentimiento positivo: 73%
-                  </div>
-                </div>
-                <div className="flex items-center text-green-600 font-medium group-hover:translate-x-2 transition-transform">
-                  Ver Dashboard
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {/* Edición 2 */}
-          <Link href="/picanthon/edicion-2">
-            <Card className="h-full border-2 border-blue-200 hover:border-blue-400 hover:shadow-2xl transition-all cursor-pointer group">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
-                    Segunda Edición
-                  </Badge>
-                  <Calendar className="h-5 w-5 text-gray-400" />
-                </div>
-                <CardTitle className="text-2xl group-hover:text-blue-600 transition-colors">
-                  Picanthon Uruguay 2025
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Segunda edición - 18 de octubre 2025 - Uruguay
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="h-4 w-4 mr-2 text-blue-600" />
-                    Montevideo, Uruguay 🇺🇾
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <BarChart3 className="h-4 w-4 mr-2 text-blue-600" />
-                    Análisis completo de feedback
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Sparkles className="h-4 w-4 mr-2 text-blue-600" />
-                    Insights y mejoras detectadas
-                  </div>
-                </div>
-                <div className="flex items-center text-blue-600 font-medium group-hover:translate-x-2 transition-transform">
-                  Ver Dashboard
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-      </section>
-
-      {/* Comparative Analysis Section */}
-      <section className="container mx-auto px-6 py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl my-16">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full mb-4">
-              <BarChart3 className="h-5 w-5 text-purple-600" />
-              <span className="text-sm font-semibold text-purple-700">Análisis Comparativo</span>
-            </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Edición 1 🇦🇷 vs Edición 2 🇺🇾
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Evolución del Picanthon entre Argentina y Uruguay: métricas, mejoras y aprendizajes
-            </p>
+        {/* Latest edition hero */}
+        <div className="edition-hero" style={{ marginTop: "8px" }}>
+          <div>
+            <span className="edition-tag">Última edición con datos</span>
+            <h1 className="edition-title">
+              Picanthon<br /><em>{latest.flag} {latest.name.replace("Picanthon ", "")}</em>
+            </h1>
+            <p className="edition-sub">{latest.date} · {latest.location}</p>
           </div>
 
-          {/* Key Metrics Comparison */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Métricas Clave</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="py-3 px-4 text-gray-700 font-semibold">Métrica</th>
-                    <th className="py-3 px-4 text-center text-green-700 font-semibold">Ed1 🇦🇷</th>
-                    <th className="py-3 px-4 text-center text-blue-700 font-semibold">Ed2 🇺🇾</th>
-                    <th className="py-3 px-4 text-center text-gray-700 font-semibold">Δ</th>
-                    <th className="py-3 px-4 text-center text-gray-700 font-semibold">Tendencia</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Satisfacción Global</td>
-                    <td className="py-4 px-4 text-center">4.30/5.00</td>
-                    <td className="py-4 px-4 text-center">4.31/5.00</td>
-                    <td className="py-4 px-4 text-center text-green-600">+0.01</td>
-                    <td className="py-4 px-4 text-center">➡️ Estable</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Probabilidad de Volver</td>
-                    <td className="py-4 px-4 text-center">4.93/5.00</td>
-                    <td className="py-4 px-4 text-center">4.56/5.00</td>
-                    <td className="py-4 px-4 text-center text-red-600">-0.38</td>
-                    <td className="py-4 px-4 text-center">📉 Retroceso</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Mentores</td>
-                    <td className="py-4 px-4 text-center">4.86/5.00</td>
-                    <td className="py-4 px-4 text-center">4.89/5.00</td>
-                    <td className="py-4 px-4 text-center text-green-600">+0.03</td>
-                    <td className="py-4 px-4 text-center">⭐ Excelente</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">MiniGames</td>
-                    <td className="py-4 px-4 text-center">3.17/5.00</td>
-                    <td className="py-4 px-4 text-center">3.94/5.00</td>
-                    <td className="py-4 px-4 text-center text-green-600 font-bold">+0.77</td>
-                    <td className="py-4 px-4 text-center">🚀 +24.3%</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Lugar</td>
-                    <td className="py-4 px-4 text-center">4.72/5.00</td>
-                    <td className="py-4 px-4 text-center">4.33/5.00</td>
-                    <td className="py-4 px-4 text-center text-red-600">-0.39</td>
-                    <td className="py-4 px-4 text-center">📉 -8.3%</td>
-                  </tr>
-                  <tr className="hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Jueces</td>
-                    <td className="py-4 px-4 text-center">4.17/5.00</td>
-                    <td className="py-4 px-4 text-center">3.83/5.00</td>
-                    <td className="py-4 px-4 text-center text-red-600">-0.34</td>
-                    <td className="py-4 px-4 text-center">📉 -8.1%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* What Improved vs What Got Worse */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {/* Improvements */}
-            <div className="bg-green-50 rounded-2xl p-6 border-2 border-green-200">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-6 w-6 text-green-600" />
-                <h3 className="text-xl font-bold text-green-900">Lo que Mejoró</h3>
+          <div className="nps-card">
+            <p className="nps-label">Probabilidad de volver</p>
+            <div className="nps-num">{latest.nps!.toFixed(2)}</div>
+            <p className="nps-sub">sobre 5.00</p>
+            <div className="nps-breakdown">
+              <div className="nps-cell">
+                <span className="nv">{latest.responses}</span>
+                <span className="nl">Respuestas</span>
               </div>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold mt-1">🚀</span>
-                  <div>
-                    <p className="font-semibold text-green-900">MiniGames +24.3%</p>
-                    <p className="text-sm text-green-700">De "relleno" a solicitud de MÁS</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold mt-1">📈</span>
-                  <div>
-                    <p className="font-semibold text-green-900">Consigna +5.7%</p>
-                    <p className="text-sm text-green-700">Mayor claridad y mejor balance</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold mt-1">⭐</span>
-                  <div>
-                    <p className="font-semibold text-green-900">Mentores (excelencia sostenida)</p>
-                    <p className="text-sm text-green-700">El pilar inquebrantable del evento</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            {/* Regressions */}
-            <div className="bg-red-50 rounded-2xl p-6 border-2 border-red-200">
-              <div className="flex items-center gap-2 mb-4">
-                <AlertCircle className="h-6 w-6 text-red-600" />
-                <h3 className="text-xl font-bold text-red-900">Áreas de Atención</h3>
+              <div className="nps-cell pos">
+                <span className="nv">{latest.pct_pos!.toFixed(0)}%</span>
+                <span className="nl">Satisfacción</span>
               </div>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-2">
-                  <span className="text-red-600 font-bold mt-1">⚠️</span>
-                  <div>
-                    <p className="font-semibold text-red-900">Probabilidad de Volver -7.6%</p>
-                    <p className="text-sm text-red-700">Mayor preocupación estratégica</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-600 font-bold mt-1">📉</span>
-                  <div>
-                    <p className="font-semibold text-red-900">Lugar -8.3%</p>
-                    <p className="text-sm text-red-700">Ergonomía y espacios de descanso</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-600 font-bold mt-1">📉</span>
-                  <div>
-                    <p className="font-semibold text-red-900">Jueces -8.1%</p>
-                    <p className="text-sm text-red-700">Feedback no resuelto persistió</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Key Insights */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Insights Principales</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="border-l-4 border-purple-500 pl-4">
-                <h4 className="font-bold text-gray-900 mb-2">🎭 Paradoja del Crecimiento</h4>
-                <p className="text-sm text-gray-600">
-                  Satisfacción estable pero con mejoras extraordinarias (MiniGames +24%) y retrocesos preocupantes (Retorno -7.6%)
-                </p>
-              </div>
-              <div className="border-l-4 border-amber-500 pl-4">
-                <h4 className="font-bold text-gray-900 mb-2">⚠️ Costo de No Escuchar</h4>
-                <p className="text-sm text-gray-600">
-                  Feedback de jueces solicitado en Ed1, no implementado, empeoró en Ed2. No resolver pain points genera frustración acumulativa
-                </p>
-              </div>
-              <div className="border-l-4 border-green-500 pl-4">
-                <h4 className="font-bold text-gray-900 mb-2">🌟 Activo Inquebrantable</h4>
-                <p className="text-sm text-gray-600">
-                  Los mentores son el ÚNICO elemento que mantiene excelencia sostenida. Son el diferenciador clave del Picanthon
-                </p>
+              <div className="nps-cell">
+                <span className="nv" style={{ fontSize: "15px", paddingTop: "6px" }}>{latest.date}</span>
+                <span className="nl">Fecha</span>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 text-center text-gray-600 border-t border-gray-200 mt-16">
-        <p className="text-sm">
-          Powered by <span className="font-semibold text-purple-600">Alertly</span> -
-          Transformando feedback en acción con IA
-        </p>
-      </footer>
-    </div>
+        {/* Metrics */}
+        <div className="section-head" style={{ marginTop: "0" }}>
+          <h2>Métricas por <em>categoría</em></h2>
+          <span className="sn">{latest.tag} · {latest.responses} respuestas</span>
+        </div>
+        <div className="metrics-grid">
+          {latest.metrics.map((m, i) => (
+            <div key={i} className="metric-cell">
+              <span className="m-label">{m.label}</span>
+              <span className={`m-value ${metricClass(m.value)}`}>{m.value.toFixed(2)}</span>
+              <span className="m-unit">/ 5.00</span>
+              <div className="m-bar">
+                <div className="m-bar-fill" style={{ width: `${(m.value / 5) * 100}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pain Points */}
+        <div className="section-head">
+          <h2>Pain <em>Points</em></h2>
+          <span className="sn">{latest.tag}</span>
+        </div>
+        <div className="pain-list">
+          {latest.topPains.map((p, i) => (
+            <div key={i} className="pain-item">
+              <span className="pain-n">0{i + 1}</span>
+              <div className="pain-body">
+                <span className="pain-cat">{p.cat}</span>
+                <span className="pain-count">{p.menciones} menciones</span>
+                <p className="pain-prob">{p.prob}</p>
+              </div>
+            </div>
+          ))}
+          <div className="pain-border-bottom" />
+        </div>
+
+        {/* Comparativa */}
+        <div className="section-head">
+          <h2>Comparativa <em>histórica</em></h2>
+          <span className="sn">3 ediciones</span>
+        </div>
+        <div className="comp-wrap">
+          <table className="comp-table">
+            <thead>
+              <tr>
+                <th>Métrica</th>
+                <th className="tc">Ed01 🇦🇷</th>
+                <th className="tc">Ed02 🇺🇾</th>
+                <th className="tc">Δ Ed01→02</th>
+                <th className="tc">Ed03 🔜</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparativa.map((row, i) => (
+                <tr key={i}>
+                  <td className="tname">
+                    {row.label}
+                    {row.note && <span className="tnote">{row.note}</span>}
+                  </td>
+                  <td className="tval">{row.ed1.toFixed(2)}</td>
+                  <td className="tval">{row.ed2.toFixed(2)}</td>
+                  <td className="tdelta"><Delta a={row.ed1} b={row.ed2} /></td>
+                  <td className="tval tpend">Pendiente</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Edition nav */}
+        <div className="section-head">
+          <h2>Todas las <em>ediciones</em></h2>
+        </div>
+        <div className="edition-nav">
+          {editions.map((ed, i) => (
+            <Link
+              key={ed.slug}
+              href={`/picanthon/${ed.slug}`}
+              className={`ed-card${
+                i === LATEST_IDX ? " ed-current" : ""
+              }${ed.status === "pending" ? " ed-pending" : ""}`}
+            >
+              <span className="ed-num">{ed.num}</span>
+              <span className="ed-tag">{ed.tag}</span>
+              <span className="ed-name">{ed.name} {ed.flag}</span>
+              <span className="ed-date">{ed.date}</span>
+              {ed.status !== "pending" && <span className="ed-arrow">→</span>}
+            </Link>
+          ))}
+        </div>
+
+        <div className="dash-footer" style={{ marginTop: "64px" }}>
+          <span>Picanthon Dashboard</span>
+          <span>Última actualización: {latest.date}</span>
+        </div>
+
+      </div>
+    </>
   )
 }
