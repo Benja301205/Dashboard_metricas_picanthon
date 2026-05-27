@@ -1,356 +1,274 @@
-import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { TrendingUp, MessageSquare, BarChart3, Sparkles, ArrowRight, Calendar, MapPin, AlertCircle } from "lucide-react"
+import Link from 'next/link'
 
-export default function AlertlyHome() {
+// ─── Datos comparativa ────────────────────────────────────────────────────────
+
+const EDITIONS = [
+  {
+    num: '01',
+    nombre: 'Picanthon Argentina',
+    pais: 'Argentina 🇦🇷',
+    fecha: '14 Jun 2025',
+    total_respuestas: 29,
+    nps: 4.93,
+    slug: 'edicion-1',
+    current: false,
+    pending: false,
+    metricas: {
+      mentores: 4.86,
+      lugar: 4.72,
+      consigna: 4.31,
+      comida: 4.21,
+      jueces: 4.17,
+      pitch: 4.03,
+      minigames: 3.17,
+    },
+  },
+  {
+    num: '02',
+    nombre: 'Picanthon Uruguay',
+    pais: 'Uruguay 🇺🇾',
+    fecha: '18 Oct 2025',
+    total_respuestas: 18,
+    nps: 4.56,
+    slug: 'edicion-2',
+    current: true,
+    pending: false,
+    metricas: {
+      mentores: 4.89,
+      lugar: 4.33,
+      consigna: 4.56,
+      comida: 4.28,
+      jueces: 3.83,
+      pitch: 4.06,
+      minigames: 3.94,
+    },
+  },
+  {
+    num: '03',
+    nombre: 'Picanthon 03',
+    pais: '—',
+    fecha: 'Mayo 2026',
+    total_respuestas: null,
+    nps: null,
+    slug: 'edicion-3',
+    current: false,
+    pending: true,
+    metricas: {
+      mentores: null,
+      lugar: null,
+      consigna: null,
+      comida: null,
+      jueces: null,
+      pitch: null,
+      minigames: null,
+    },
+  },
+]
+
+const ULTIMA = EDITIONS[1] // Ed02 es la última con datos
+
+const METRICAS_COMP = [
+  { key: 'nps',       label: 'Probabilidad de volver (NPS)',  ed1: 4.93, ed2: 4.56 },
+  { key: 'mentores',  label: 'Calidad de mentores',           ed1: 4.86, ed2: 4.89 },
+  { key: 'lugar',     label: 'Calidad del lugar',             ed1: 4.72, ed2: 4.33 },
+  { key: 'consigna',  label: 'Consigna y output esperado',    ed1: 4.31, ed2: 4.56 },
+  { key: 'comida',    label: 'Calidad de la comida',          ed1: 4.21, ed2: 4.28 },
+  { key: 'pitch',     label: 'Dinámica del pitch',            ed1: 4.03, ed2: 4.06 },
+  { key: 'jueces',    label: 'Decisión de los jueces',        ed1: 4.17, ed2: 3.83 },
+  { key: 'minigames', label: 'MiniGames',                    ed1: 3.17, ed2: 3.94 },
+]
+
+function fmt(n: number) { return n.toFixed(2) }
+function delta(a: number, b: number) {
+  const d = b - a
+  const sign = d > 0 ? '+' : ''
+  return { text: `${sign}${d.toFixed(2)}`, up: d > 0 }
+}
+
+function Topbar({ active }: { active: string }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50">
-      {/* Hero Section */}
-      <header className="container mx-auto px-6 pt-16 pb-12">
-        <div className="text-center max-w-4xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-2xl shadow-lg">
-              <MessageSquare className="h-12 w-12" />
-            </div>
+    <header className="topbar">
+      <a href="/" className="brand">
+        <img
+          src="https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
+          alt=""
+          aria-hidden
+          className="brand-mark-png"
+          draggable={false}
+        />
+        <span className="brand-name">Picanthon</span>
+      </a>
+      <nav className="nav">
+        <Link href="/" className={active === 'home' ? 'active' : ''}>Dashboard</Link>
+        <Link href="/picanthon/edicion-1" className={active === 'ed1' ? 'active' : ''}>Ed 01</Link>
+        <Link href="/picanthon/edicion-2" className={active === 'ed2' ? 'active' : ''}>Ed 02</Link>
+        <Link href="/picanthon/edicion-3" className={`${active === 'ed3' ? 'active' : ''} pending`}>Ed 03</Link>
+      </nav>
+    </header>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <span>Picanthon · Métricas internas · 2025–2026</span>
+      <span>3 ediciones · {29 + 18} respuestas totales</span>
+    </footer>
+  )
+}
+
+export default function HomePage() {
+  const heroMetrics = [
+    { label: 'Mentores',     val: ULTIMA.metricas.mentores! },
+    { label: 'Lugar',        val: ULTIMA.metricas.lugar! },
+    { label: 'Consigna',     val: ULTIMA.metricas.consigna! },
+    { label: 'Comida',       val: ULTIMA.metricas.comida! },
+    { label: 'Pitch',        val: ULTIMA.metricas.pitch! },
+    { label: 'Jueces',       val: ULTIMA.metricas.jueces! },
+    { label: 'MiniGames',    val: ULTIMA.metricas.minigames! },
+  ]
+
+  return (
+    <div className="page-wrap">
+      <Topbar active="home" />
+
+      <div className="dash-page">
+
+        {/* Rail */}
+        <div className="dash-rail">
+          <span className="rail-txt">Dashboard · Organizadores · Picanthon</span>
+          <span className="rail-txt">2025 – 2026</span>
+        </div>
+
+        {/* ── ÚLTIMA EDICIÓN HERO ───────────────────────────────────── */}
+        <section className="last-edition-hero">
+          <div className="last-edition-eyebrow">
+            <span className="dot" />
+            <span className="txt">Última edición con datos</span>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Alertly
-            </span>
+
+          <h1 className="last-edition-title">
+            Picanthon <em>02</em>
           </h1>
-          <p className="text-2xl text-gray-700 mb-4 font-medium">
-            El oído inteligente que escucha a tus clientes
+          <p className="last-edition-sub">
+            Uruguay 🇺🇾 · 18 Oct 2025 · {ULTIMA.total_respuestas} respuestas
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Transformamos feedback y encuestas en insights accionables usando inteligencia artificial.
-            Detectamos automáticamente qué funciona, qué necesita mejorar y qué quieren tus clientes.
-          </p>
-        </div>
-      </header>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <Card className="border-2 border-purple-200 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                <Sparkles className="h-6 w-6 text-purple-600" />
+          <div className="last-edition-grid">
+            {/* NPS Card */}
+            <div className="nps-card">
+              <p className="k">NPS proxy — probabilidad de volver</p>
+              <div className="big-num">
+                {fmt(ULTIMA.nps!)}
+                <small>/5</small>
               </div>
-              <CardTitle className="text-xl">Análisis Automático</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Procesamos miles de comentarios y detectamos patrones, sentimientos y tendencias en segundos.
+              <p className="verdict">Retorno probable</p>
+              <p className="note">Escala 1–5 · pregunta Q1</p>
+              <p className="resp-count">
+                Respuestas: <b>{ULTIMA.total_respuestas}</b>
               </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-blue-200 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                <TrendingUp className="h-6 w-6 text-blue-600" />
-              </div>
-              <CardTitle className="text-xl">Insights Accionables</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Identificamos problemas críticos y oportunidades de mejora con recomendaciones claras y priorizadas.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2 border-pink-200 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <div className="bg-pink-100 w-12 h-12 rounded-lg flex items-center justify-center mb-3">
-                <BarChart3 className="h-6 w-6 text-pink-600" />
-              </div>
-              <CardTitle className="text-xl">Visualización Clara</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                Dashboards interactivos que muestran métricas clave, tendencias y comparaciones de forma visual.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Case Study Header */}
-        <div className="text-center mb-12">
-          <Badge className="mb-4 text-sm px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600">
-            Casos de Análisis
-          </Badge>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            Análisis de Feedback: Picanthon
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Analizamos el feedback de las ediciones de Picanthon, la hackathon organizada por Picante,
-            para ayudarles a entender qué funcionó y cómo mejorar futuras ediciones.
-          </p>
-        </div>
-
-        {/* Picanthon Editions Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Edición 1 */}
-          <Link href="/picanthon/edicion-1">
-            <Card className="h-full border-2 border-green-200 hover:border-green-400 hover:shadow-2xl transition-all cursor-pointer group">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
-                    Primera Edición
-                  </Badge>
-                  <Calendar className="h-5 w-5 text-gray-400" />
-                </div>
-                <CardTitle className="text-2xl group-hover:text-green-600 transition-colors">
-                  Picanthon 2025 🇦🇷
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Primera edición - 14 de junio 2025 - Argentina
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="h-4 w-4 mr-2 text-green-600" />
-                    Argentina 🇦🇷
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <BarChart3 className="h-4 w-4 mr-2 text-green-600" />
-                    29 respuestas analizadas
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
-                    Sentimiento positivo: 73%
-                  </div>
-                </div>
-                <div className="flex items-center text-green-600 font-medium group-hover:translate-x-2 transition-transform">
-                  Ver Dashboard
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-
-          {/* Edición 2 */}
-          <Link href="/picanthon/edicion-2">
-            <Card className="h-full border-2 border-blue-200 hover:border-blue-400 hover:shadow-2xl transition-all cursor-pointer group">
-              <CardHeader>
-                <div className="flex items-start justify-between mb-3">
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
-                    Segunda Edición
-                  </Badge>
-                  <Calendar className="h-5 w-5 text-gray-400" />
-                </div>
-                <CardTitle className="text-2xl group-hover:text-blue-600 transition-colors">
-                  Picanthon Uruguay 2025
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Segunda edición - 18 de octubre 2025 - Uruguay
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 mb-6">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="h-4 w-4 mr-2 text-blue-600" />
-                    Montevideo, Uruguay 🇺🇾
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <BarChart3 className="h-4 w-4 mr-2 text-blue-600" />
-                    Análisis completo de feedback
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Sparkles className="h-4 w-4 mr-2 text-blue-600" />
-                    Insights y mejoras detectadas
-                  </div>
-                </div>
-                <div className="flex items-center text-blue-600 font-medium group-hover:translate-x-2 transition-transform">
-                  Ver Dashboard
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-      </section>
-
-      {/* Comparative Analysis Section */}
-      <section className="container mx-auto px-6 py-16 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl my-16">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full mb-4">
-              <BarChart3 className="h-5 w-5 text-purple-600" />
-              <span className="text-sm font-semibold text-purple-700">Análisis Comparativo</span>
             </div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Edición 1 🇦🇷 vs Edición 2 🇺🇾
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Evolución del Picanthon entre Argentina y Uruguay: métricas, mejoras y aprendizajes
-            </p>
-          </div>
 
-          {/* Key Metrics Comparison */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Métricas Clave</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b-2 border-gray-200">
-                    <th className="py-3 px-4 text-gray-700 font-semibold">Métrica</th>
-                    <th className="py-3 px-4 text-center text-green-700 font-semibold">Ed1 🇦🇷</th>
-                    <th className="py-3 px-4 text-center text-blue-700 font-semibold">Ed2 🇺🇾</th>
-                    <th className="py-3 px-4 text-center text-gray-700 font-semibold">Δ</th>
-                    <th className="py-3 px-4 text-center text-gray-700 font-semibold">Tendencia</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Satisfacción Global</td>
-                    <td className="py-4 px-4 text-center">4.30/5.00</td>
-                    <td className="py-4 px-4 text-center">4.31/5.00</td>
-                    <td className="py-4 px-4 text-center text-green-600">+0.01</td>
-                    <td className="py-4 px-4 text-center">➡️ Estable</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Probabilidad de Volver</td>
-                    <td className="py-4 px-4 text-center">4.93/5.00</td>
-                    <td className="py-4 px-4 text-center">4.56/5.00</td>
-                    <td className="py-4 px-4 text-center text-red-600">-0.38</td>
-                    <td className="py-4 px-4 text-center">📉 Retroceso</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Mentores</td>
-                    <td className="py-4 px-4 text-center">4.86/5.00</td>
-                    <td className="py-4 px-4 text-center">4.89/5.00</td>
-                    <td className="py-4 px-4 text-center text-green-600">+0.03</td>
-                    <td className="py-4 px-4 text-center">⭐ Excelente</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">MiniGames</td>
-                    <td className="py-4 px-4 text-center">3.17/5.00</td>
-                    <td className="py-4 px-4 text-center">3.94/5.00</td>
-                    <td className="py-4 px-4 text-center text-green-600 font-bold">+0.77</td>
-                    <td className="py-4 px-4 text-center">🚀 +24.3%</td>
-                  </tr>
-                  <tr className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Lugar</td>
-                    <td className="py-4 px-4 text-center">4.72/5.00</td>
-                    <td className="py-4 px-4 text-center">4.33/5.00</td>
-                    <td className="py-4 px-4 text-center text-red-600">-0.39</td>
-                    <td className="py-4 px-4 text-center">📉 -8.3%</td>
-                  </tr>
-                  <tr className="hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium">Jueces</td>
-                    <td className="py-4 px-4 text-center">4.17/5.00</td>
-                    <td className="py-4 px-4 text-center">3.83/5.00</td>
-                    <td className="py-4 px-4 text-center text-red-600">-0.34</td>
-                    <td className="py-4 px-4 text-center">📉 -8.1%</td>
-                  </tr>
-                </tbody>
-              </table>
+            {/* Metrics mini-list */}
+            <div className="hero-metrics">
+              {heroMetrics.map((m) => (
+                <div key={m.label} className="hero-metric-row">
+                  <span className="cat">{m.label}</span>
+                  <div className="bar-col">
+                    <div className="hero-bar">
+                      <div className="fill" style={{ width: `${(m.val / 5) * 100}%` }} />
+                    </div>
+                  </div>
+                  <span className="val">
+                    {fmt(m.val)}<small>/5</small>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
+        </section>
 
-          {/* What Improved vs What Got Worse */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {/* Improvements */}
-            <div className="bg-green-50 rounded-2xl p-6 border-2 border-green-200">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-6 w-6 text-green-600" />
-                <h3 className="text-xl font-bold text-green-900">Lo que Mejoró</h3>
-              </div>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold mt-1">🚀</span>
-                  <div>
-                    <p className="font-semibold text-green-900">MiniGames +24.3%</p>
-                    <p className="text-sm text-green-700">De "relleno" a solicitud de MÁS</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold mt-1">📈</span>
-                  <div>
-                    <p className="font-semibold text-green-900">Consigna +5.7%</p>
-                    <p className="text-sm text-green-700">Mayor claridad y mejor balance</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold mt-1">⭐</span>
-                  <div>
-                    <p className="font-semibold text-green-900">Mentores (excelencia sostenida)</p>
-                    <p className="text-sm text-green-700">El pilar inquebrantable del evento</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            {/* Regressions */}
-            <div className="bg-red-50 rounded-2xl p-6 border-2 border-red-200">
-              <div className="flex items-center gap-2 mb-4">
-                <AlertCircle className="h-6 w-6 text-red-600" />
-                <h3 className="text-xl font-bold text-red-900">Áreas de Atención</h3>
-              </div>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-2">
-                  <span className="text-red-600 font-bold mt-1">⚠️</span>
-                  <div>
-                    <p className="font-semibold text-red-900">Probabilidad de Volver -7.6%</p>
-                    <p className="text-sm text-red-700">Mayor preocupación estratégica</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-600 font-bold mt-1">📉</span>
-                  <div>
-                    <p className="font-semibold text-red-900">Lugar -8.3%</p>
-                    <p className="text-sm text-red-700">Ergonomía y espacios de descanso</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-600 font-bold mt-1">📉</span>
-                  <div>
-                    <p className="font-semibold text-red-900">Jueces -8.1%</p>
-                    <p className="text-sm text-red-700">Feedback no resuelto persistió</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
+        {/* ── COMPARATIVA ──────────────────────────────────────────── */}
+        <section>
+          <div className="section-head">
+            <h2>Comparativa <em>ediciones</em></h2>
+            <span className="num">Ed 01 · Ed 02 · Ed 03</span>
           </div>
 
-          {/* Key Insights */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Insights Principales</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="border-l-4 border-purple-500 pl-4">
-                <h4 className="font-bold text-gray-900 mb-2">🎭 Paradoja del Crecimiento</h4>
-                <p className="text-sm text-gray-600">
-                  Satisfacción estable pero con mejoras extraordinarias (MiniGames +24%) y retrocesos preocupantes (Retorno -7.6%)
-                </p>
-              </div>
-              <div className="border-l-4 border-amber-500 pl-4">
-                <h4 className="font-bold text-gray-900 mb-2">⚠️ Costo de No Escuchar</h4>
-                <p className="text-sm text-gray-600">
-                  Feedback de jueces solicitado en Ed1, no implementado, empeoró en Ed2. No resolver pain points genera frustración acumulativa
-                </p>
-              </div>
-              <div className="border-l-4 border-green-500 pl-4">
-                <h4 className="font-bold text-gray-900 mb-2">🌟 Activo Inquebrantable</h4>
-                <p className="text-sm text-gray-600">
-                  Los mentores son el ÚNICO elemento que mantiene excelencia sostenida. Son el diferenciador clave del Picanthon
-                </p>
-              </div>
-            </div>
+          <div className="comp-wrap">
+            <table className="comp-table">
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th>Ed 01 🇦🇷</th>
+                  <th>Ed 02 🇺🇾</th>
+                  <th>Δ 01→02</th>
+                  <th>Ed 03</th>
+                </tr>
+              </thead>
+              <tbody>
+                {METRICAS_COMP.map((m) => {
+                  const d = delta(m.ed1, m.ed2)
+                  const isMinigames = m.key === 'minigames'
+                  return (
+                    <tr key={m.key}>
+                      <td className="m-name">{m.label}</td>
+                      <td className="m-val">{fmt(m.ed1)}</td>
+                      <td className="m-val">{fmt(m.ed2)}</td>
+                      <td className={`delta ${d.up ? 'delta-up' : 'delta-down'}`}>
+                        {d.text}
+                      </td>
+                      <td className={`m-val ${isMinigames ? 'na' : 'pending'}`}>
+                        {isMinigames ? 'N/A · sin minigames' : '—'}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
+
+          <div className="comp-note">
+            ⚠ Ed 03 — No se realizaron MiniGames en esta edición. La métrica queda excluida de la comparativa.
+          </div>
+        </section>
+
+        {/* ── NAVEGACIÓN POR EDICIÓN ───────────────────────────────── */}
+        <div className="section-head" style={{ marginTop: 72 }}>
+          <h2>Ver <em>edición</em></h2>
+          <span className="num">Zoom por edición</span>
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 text-center text-gray-600 border-t border-gray-200 mt-16">
-        <p className="text-sm">
-          Powered by <span className="font-semibold text-purple-600">Alertly</span> -
-          Transformando feedback en acción con IA
-        </p>
-      </footer>
+        <div className="edition-cards">
+          {EDITIONS.map((ed) => (
+            <Link
+              key={ed.num}
+              href={`/picanthon/${ed.slug}`}
+              className={`edition-card ${ed.current ? 'current' : ''} ${ed.pending ? 'pending' : ''}`}
+            >
+              <span className="arrow">→</span>
+              <span className="ed-eyebrow">
+                {ed.current ? '● Última con datos' : ed.pending ? '○ Pendiente' : 'Edición'}
+              </span>
+              <span className="ed-num">{ed.num}</span>
+              <span className="ed-name">{ed.nombre}</span>
+              <span className="ed-date">{ed.pais} · {ed.fecha}</span>
+              <div className="ed-nps-row">
+                {ed.nps !== null ? (
+                  <>
+                    <span className="ed-nps-val">{fmt(ed.nps)}<small style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-faint)', marginLeft: 4 }}>/5</small></span>
+                    <span className="ed-nps-lbl">NPS</span>
+                  </>
+                ) : (
+                  <span className="ed-nps-val">Datos pendientes</span>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <Footer />
+      </div>
     </div>
   )
 }
