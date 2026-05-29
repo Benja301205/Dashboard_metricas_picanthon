@@ -1,6 +1,5 @@
 import Link from 'next/link'
-
-// ─── Datos comparativa ────────────────────────────────────────────────────────
+import Topbar from '@/app/components/Topbar'
 
 const EDITIONS = [
   {
@@ -13,15 +12,6 @@ const EDITIONS = [
     slug: 'edicion-1',
     current: false,
     pending: false,
-    metricas: {
-      mentores: 4.86,
-      lugar: 4.72,
-      consigna: 4.31,
-      comida: 4.21,
-      jueces: 4.17,
-      pitch: 4.03,
-      minigames: 3.17,
-    },
   },
   {
     num: '02',
@@ -53,19 +43,10 @@ const EDITIONS = [
     slug: 'edicion-3',
     current: false,
     pending: true,
-    metricas: {
-      mentores: null,
-      lugar: null,
-      consigna: null,
-      comida: null,
-      jueces: null,
-      pitch: null,
-      minigames: null,
-    },
   },
 ]
 
-const ULTIMA = EDITIONS[1] // Ed02 es la última con datos
+const ULTIMA = EDITIONS[1]
 
 const METRICAS_COMP = [
   { key: 'nps',       label: 'Probabilidad de volver (NPS)',  ed1: 4.93, ed2: 4.56 },
@@ -85,29 +66,6 @@ function delta(a: number, b: number) {
   return { text: `${sign}${d.toFixed(2)}`, up: d > 0 }
 }
 
-function Topbar({ active }: { active: string }) {
-  return (
-    <header className="topbar">
-      <a href="/" className="brand">
-        <img
-          src="https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
-          alt=""
-          aria-hidden
-          className="brand-mark-png"
-          draggable={false}
-        />
-        <span className="brand-name">Picanthon</span>
-      </a>
-      <nav className="nav">
-        <Link href="/" className={active === 'home' ? 'active' : ''}>Dashboard</Link>
-        <Link href="/picanthon/edicion-1" className={active === 'ed1' ? 'active' : ''}>Ed 01</Link>
-        <Link href="/picanthon/edicion-2" className={active === 'ed2' ? 'active' : ''}>Ed 02</Link>
-        <Link href="/picanthon/edicion-3" className={`${active === 'ed3' ? 'active' : ''} pending`}>Ed 03</Link>
-      </nav>
-    </header>
-  )
-}
-
 function Footer() {
   return (
     <footer className="footer">
@@ -119,13 +77,13 @@ function Footer() {
 
 export default function HomePage() {
   const heroMetrics = [
-    { label: 'Mentores',     val: ULTIMA.metricas.mentores! },
-    { label: 'Lugar',        val: ULTIMA.metricas.lugar! },
-    { label: 'Consigna',     val: ULTIMA.metricas.consigna! },
-    { label: 'Comida',       val: ULTIMA.metricas.comida! },
-    { label: 'Pitch',        val: ULTIMA.metricas.pitch! },
-    { label: 'Jueces',       val: ULTIMA.metricas.jueces! },
-    { label: 'MiniGames',    val: ULTIMA.metricas.minigames! },
+    { label: 'Mentores',  val: 4.89 },
+    { label: 'Lugar',     val: 4.33 },
+    { label: 'Consigna',  val: 4.56 },
+    { label: 'Comida',    val: 4.28 },
+    { label: 'Pitch',     val: 4.06 },
+    { label: 'Jueces',    val: 3.83 },
+    { label: 'MiniGames', val: 3.94 },
   ]
 
   return (
@@ -133,43 +91,30 @@ export default function HomePage() {
       <Topbar active="home" />
 
       <div className="dash-page">
-
-        {/* Rail */}
         <div className="dash-rail">
           <span className="rail-txt">Dashboard · Organizadores · Picanthon</span>
           <span className="rail-txt">2025 – 2026</span>
         </div>
 
-        {/* ── ÚLTIMA EDICIÓN HERO ───────────────────────────────────── */}
         <section className="last-edition-hero">
           <div className="last-edition-eyebrow">
             <span className="dot" />
             <span className="txt">Última edición con datos</span>
           </div>
-
-          <h1 className="last-edition-title">
-            Picanthon <em>02</em>
-          </h1>
+          <h1 className="last-edition-title">Picanthon <em>02</em></h1>
           <p className="last-edition-sub">
             Uruguay 🇺🇾 · 18 Oct 2025 · {ULTIMA.total_respuestas} respuestas
           </p>
 
           <div className="last-edition-grid">
-            {/* NPS Card */}
             <div className="nps-card">
               <p className="k">NPS proxy — probabilidad de volver</p>
-              <div className="big-num">
-                {fmt(ULTIMA.nps!)}
-                <small>/5</small>
-              </div>
+              <div className="big-num">{fmt(ULTIMA.nps!)}<small>/5</small></div>
               <p className="verdict">Retorno probable</p>
               <p className="note">Escala 1–5 · pregunta Q1</p>
-              <p className="resp-count">
-                Respuestas: <b>{ULTIMA.total_respuestas}</b>
-              </p>
+              <p className="resp-count">Respuestas: <b>{ULTIMA.total_respuestas}</b></p>
             </div>
 
-            {/* Metrics mini-list */}
             <div className="hero-metrics">
               {heroMetrics.map((m) => (
                 <div key={m.label} className="hero-metric-row">
@@ -179,22 +124,18 @@ export default function HomePage() {
                       <div className="fill" style={{ width: `${(m.val / 5) * 100}%` }} />
                     </div>
                   </div>
-                  <span className="val">
-                    {fmt(m.val)}<small>/5</small>
-                  </span>
+                  <span className="val">{fmt(m.val)}<small>/5</small></span>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── COMPARATIVA ──────────────────────────────────────────── */}
         <section>
           <div className="section-head">
             <h2>Comparativa <em>ediciones</em></h2>
             <span className="num">Ed 01 · Ed 02 · Ed 03</span>
           </div>
-
           <div className="comp-wrap">
             <table className="comp-table">
               <thead>
@@ -215,9 +156,7 @@ export default function HomePage() {
                       <td className="m-name">{m.label}</td>
                       <td className="m-val">{fmt(m.ed1)}</td>
                       <td className="m-val">{fmt(m.ed2)}</td>
-                      <td className={`delta ${d.up ? 'delta-up' : 'delta-down'}`}>
-                        {d.text}
-                      </td>
+                      <td className={`delta ${d.up ? 'delta-up' : 'delta-down'}`}>{d.text}</td>
                       <td className={`m-val ${isMinigames ? 'na' : 'pending'}`}>
                         {isMinigames ? 'N/A · sin minigames' : '—'}
                       </td>
@@ -227,13 +166,11 @@ export default function HomePage() {
               </tbody>
             </table>
           </div>
-
           <div className="comp-note">
             ⚠ Ed 03 — No se realizaron MiniGames en esta edición. La métrica queda excluida de la comparativa.
           </div>
         </section>
 
-        {/* ── NAVEGACIÓN POR EDICIÓN ───────────────────────────────── */}
         <div className="section-head" style={{ marginTop: 72 }}>
           <h2>Ver <em>edición</em></h2>
           <span className="num">Zoom por edición</span>

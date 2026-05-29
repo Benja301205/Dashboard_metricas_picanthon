@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Topbar from '@/app/components/Topbar'
 
 const ED2 = {
   num: '02',
@@ -56,7 +57,6 @@ const ED2 = {
       quote: null,
     },
   ],
-  // — Los comentarios destacados serán actualizados por el organizador
   quotes: [
     {
       cat: 'Mentores',
@@ -79,29 +79,6 @@ const ED2 = {
 
 function fmt(n: number) { return n.toFixed(2) }
 
-function Topbar({ active }: { active: string }) {
-  return (
-    <header className="topbar">
-      <a href="/" className="brand">
-        <img
-          src="https://raw.githubusercontent.com/Benja301205/Encuesta-Picanthon-2-/main/public/chili.png"
-          alt=""
-          aria-hidden
-          className="brand-mark-png"
-          draggable={false}
-        />
-        <span className="brand-name">Picanthon</span>
-      </a>
-      <nav className="nav">
-        <Link href="/">Dashboard</Link>
-        <Link href="/picanthon/edicion-1" className={active === 'ed1' ? 'active' : ''}>Ed 01</Link>
-        <Link href="/picanthon/edicion-2" className={active === 'ed2' ? 'active' : ''}>Ed 02</Link>
-        <Link href="/picanthon/edicion-3" className={`${active === 'ed3' ? 'active' : ''} pending`}>Ed 03</Link>
-      </nav>
-    </header>
-  )
-}
-
 function Footer() {
   return (
     <footer className="footer">
@@ -117,15 +94,10 @@ export default function Edicion2Page() {
       <Topbar active="ed2" />
 
       <div className="edition-page">
-        <Link href="/" className="nav-back">
-          ← Volver al dashboard
-        </Link>
+        <Link href="/" className="nav-back">← Volver al dashboard</Link>
 
-        {/* Header */}
         <div className="edition-header">
-          <h1 className="edition-title">
-            Picanthon <em>02</em>
-          </h1>
+          <h1 className="edition-title">Picanthon <em>02</em></h1>
           <div className="edition-meta">
             <div className="meta-line"><b>País</b> {ED2.pais}</div>
             <div className="meta-line"><b>Ciudad</b> {ED2.ciudad}</div>
@@ -135,23 +107,17 @@ export default function Edicion2Page() {
           </div>
         </div>
 
-        {/* NPS */}
         <div className="nps-card" style={{ maxWidth: 320 }}>
           <p className="k">NPS proxy — probabilidad de volver</p>
-          <div className="big-num">
-            {fmt(ED2.nps)}
-            <small>/5</small>
-          </div>
+          <div className="big-num">{fmt(ED2.nps)}<small>/5</small></div>
           <p className="verdict">Retorno probable</p>
           <p className="note">Q1 · escala 1–5 · {ED2.total_respuestas} respuestas</p>
         </div>
 
-        {/* Métricas por categoría */}
         <div className="section-head">
           <h2>Métricas por <em>categoría</em></h2>
           <span className="num">{ED2.metricas.length} dimensiones</span>
         </div>
-
         <div className="metrics-grid">
           {ED2.metricas.map((m) => (
             <div key={m.cat} className="metric-row">
@@ -159,19 +125,15 @@ export default function Edicion2Page() {
                 <span className="m-name">{m.cat}</span>
                 <span className="m-avg">{fmt(m.promedio)}<small>/5</small></span>
               </div>
-              <div className="m-bar">
-                <div className="fill" style={{ width: `${(m.promedio / 5) * 100}%` }} />
-              </div>
+              <div className="m-bar"><div className="fill" style={{ width: `${(m.promedio / 5) * 100}%` }} /></div>
             </div>
           ))}
         </div>
 
-        {/* Pain Points */}
         <div className="section-head">
           <h2>Pain <em>points</em></h2>
           <span className="num">{ED2.pain_points.filter(p => p.quote).length} críticos · {ED2.pain_points.filter(p => !p.quote).length} secundario</span>
         </div>
-
         <div className="pain-grid">
           {ED2.pain_points.map((p) => (
             <div key={p.cat} className="pain-card">
@@ -185,12 +147,10 @@ export default function Edicion2Page() {
           ))}
         </div>
 
-        {/* Comentarios destacados */}
         <div className="section-head">
           <h2>Comentarios <em>destacados</em></h2>
           <span className="num">{ED2.quotes.length} seleccionados</span>
         </div>
-
         <div className="quotes">
           {ED2.quotes.map((q, i) => (
             <div key={i} className="quote">
