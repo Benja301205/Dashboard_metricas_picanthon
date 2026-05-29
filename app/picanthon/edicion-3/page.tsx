@@ -10,18 +10,18 @@ const ED3 = {
   total_respuestas: 5,
   nps: 4.80,
   metricas: [
-    { cat: 'Probabilidad de volver (NPS)', promedio: 4.80 },
-    { cat: 'Calidad de mentores',          promedio: 5.00 },
-    { cat: 'Calidad de la comida',         promedio: 4.40 },
-    { cat: 'Decisión de los jueces',       promedio: 4.40 },
-    { cat: 'Calidad del lugar',            promedio: 4.00 },
-    { cat: 'Dinámica del pitch',           promedio: 3.80 },
-    { cat: 'Consigna y output esperado',   promedio: 3.60 },
+    { cat: 'Probabilidad de volver (NPS)',       promedio: 4.80 },
+    { cat: 'Calidad de mentores',                 promedio: 5.00 },
+    { cat: 'Calidad de la comida',                promedio: 4.40 },
+    { cat: 'Decisión de los jueces',              promedio: 4.40 },
+    { cat: 'Calidad del lugar',                   promedio: 4.00 },
+    { cat: 'Dinámica de la presentación',         promedio: 3.80 },
+    { cat: 'Consigna y output esperado',          promedio: 3.60 },
     // ⚠ Sin MiniGames en esta edición
   ],
   pain_points: [
     {
-      cat: 'Tiempo de pitch',
+      cat: 'Tiempo de presentación',
       menciones: 2,
       problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Genera frustración directa en la evaluación y sensación de injusticia.',
       quote: 'No llegamos a mostrar ni la mitad de lo que teníamos. Minuto y medio fue poco para presentar bien la idea.',
@@ -57,7 +57,7 @@ const ED3 = {
       texto: 'El espacio reducido permitía hablar muy bien con todos y no solo hablar de la idea sino conocerse.',
     },
     {
-      cat: 'Pitch',
+      cat: 'Presentación',
       texto: 'No llegamos a mostrar ni la mitad de lo que teníamos. Minuto y medio fue poco para presentar bien la idea.',
     },
     {

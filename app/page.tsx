@@ -37,7 +37,7 @@ const EDITIONS = [
   },
 ]
 
-const ULTIMA = EDITIONS[2] // Ed03 es la última con datos
+const ULTIMA = EDITIONS[2]
 
 const METRICAS_COMP = [
   { key: 'nps',      label: 'Probabilidad de volver (NPS)', ed1: 4.93, ed2: 4.56, ed3: 4.80 },
@@ -45,7 +45,7 @@ const METRICAS_COMP = [
   { key: 'lugar',    label: 'Calidad del lugar',            ed1: 4.72, ed2: 4.33, ed3: 4.00 },
   { key: 'consigna', label: 'Consigna y output esperado',   ed1: 4.31, ed2: 4.56, ed3: 3.60 },
   { key: 'comida',   label: 'Calidad de la comida',         ed1: 4.21, ed2: 4.28, ed3: 4.40 },
-  { key: 'pitch',    label: 'Dinámica del pitch',           ed1: 4.03, ed2: 4.06, ed3: 3.80 },
+  { key: 'pitch',    label: 'Dinámica del pitch / presentación', ed1: 4.03, ed2: 4.06, ed3: 3.80 },
   { key: 'jueces',   label: 'Decisión de los jueces',       ed1: 4.17, ed2: 3.83, ed3: 4.40 },
   { key: 'minigames',label: 'MiniGames',                   ed1: 3.17, ed2: 3.94, ed3: null },
 ]
@@ -68,12 +68,12 @@ function Footer() {
 
 export default function HomePage() {
   const heroMetrics = [
-    { label: 'Mentores',  val: 5.00 },
-    { label: 'Comida',    val: 4.40 },
-    { label: 'Jueces',    val: 4.40 },
-    { label: 'Lugar',     val: 4.00 },
-    { label: 'Pitch',     val: 3.80 },
-    { label: 'Consigna',  val: 3.60 },
+    { label: 'Mentores',       val: 5.00 },
+    { label: 'Comida',         val: 4.40 },
+    { label: 'Jueces',         val: 4.40 },
+    { label: 'Lugar',          val: 4.00 },
+    { label: 'Presentación',   val: 3.80 },
+    { label: 'Consigna',       val: 3.60 },
   ]
 
   return (
@@ -86,7 +86,6 @@ export default function HomePage() {
           <span className="rail-txt">2025 – 2026</span>
         </div>
 
-        {/* ── ÚLTIMA EDICIÓN HERO */}
         <section className="last-edition-hero">
           <div className="last-edition-eyebrow">
             <span className="dot" />
@@ -122,7 +121,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── COMPARATIVA */}
         <section>
           <div className="section-head">
             <h2>Comparativa <em>ediciones</em></h2>
@@ -165,7 +163,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── NAVEGACIÓN */}
         <div className="section-head" style={{ marginTop: 72 }}>
           <h2>Ver <em>edición</em></h2>
           <span className="num">Zoom por edición</span>
