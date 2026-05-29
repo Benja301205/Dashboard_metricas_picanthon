@@ -29,7 +29,7 @@ const EDITIONS = [
     nombre: 'Picanthon Argentina',
     pais: 'Argentina 🇦🇷',
     fecha: '28 May 2026',
-    total_respuestas: 5,
+    total_respuestas: 10,
     nps: 4.80,
     slug: 'edicion-3',
     current: true,
@@ -40,14 +40,14 @@ const EDITIONS = [
 const ULTIMA = EDITIONS[2]
 
 const METRICAS_COMP = [
-  { key: 'nps',      label: 'Probabilidad de volver (NPS)', ed1: 4.93, ed2: 4.56, ed3: 4.80 },
-  { key: 'mentores', label: 'Calidad de mentores',          ed1: 4.86, ed2: 4.89, ed3: 5.00 },
-  { key: 'lugar',    label: 'Calidad del lugar',            ed1: 4.72, ed2: 4.33, ed3: 4.00 },
-  { key: 'consigna', label: 'Consigna y output esperado',   ed1: 4.31, ed2: 4.56, ed3: 3.60 },
-  { key: 'comida',   label: 'Calidad de la comida',         ed1: 4.21, ed2: 4.28, ed3: 4.40 },
-  { key: 'pitch',    label: 'Dinámica del pitch / presentación', ed1: 4.03, ed2: 4.06, ed3: 3.80 },
-  { key: 'jueces',   label: 'Decisión de los jueces',       ed1: 4.17, ed2: 3.83, ed3: 4.40 },
-  { key: 'minigames',label: 'MiniGames',                   ed1: 3.17, ed2: 3.94, ed3: null },
+  { key: 'nps',       label: 'Probabilidad de volver (NPS)', ed1: 4.93, ed2: 4.56, ed3: 4.80 },
+  { key: 'mentores',  label: 'Calidad de mentores',          ed1: 4.86, ed2: 4.89, ed3: 4.90 },
+  { key: 'lugar',     label: 'Calidad del lugar',            ed1: 4.72, ed2: 4.33, ed3: 4.20 },
+  { key: 'consigna',  label: 'Consigna y output esperado',   ed1: 4.31, ed2: 4.56, ed3: 4.00 },
+  { key: 'comida',    label: 'Calidad de la comida',         ed1: 4.21, ed2: 4.28, ed3: 4.40 },
+  { key: 'pitch',     label: 'Dinámica del pitch / presentación', ed1: 4.03, ed2: 4.06, ed3: 3.90 },
+  { key: 'jueces',    label: 'Decisión de los jueces',       ed1: 4.17, ed2: 3.83, ed3: 4.40 },
+  { key: 'minigames', label: 'MiniGames',                   ed1: 3.17, ed2: 3.94, ed3: null },
 ]
 
 function fmt(n: number) { return n.toFixed(2) }
@@ -61,19 +61,19 @@ function Footer() {
   return (
     <footer className="footer">
       <span>Picanthon · Métricas internas · 2025–2026</span>
-      <span>3 ediciones · {29 + 18 + 5} respuestas totales</span>
+      <span>3 ediciones · {29 + 18 + 10} respuestas totales</span>
     </footer>
   )
 }
 
 export default function HomePage() {
   const heroMetrics = [
-    { label: 'Mentores',       val: 5.00 },
+    { label: 'Mentores',       val: 4.90 },
     { label: 'Comida',         val: 4.40 },
     { label: 'Jueces',         val: 4.40 },
-    { label: 'Lugar',          val: 4.00 },
-    { label: 'Presentación',   val: 3.80 },
-    { label: 'Consigna',       val: 3.60 },
+    { label: 'Lugar',          val: 4.20 },
+    { label: 'Presentación',   val: 3.90 },
+    { label: 'Consigna',       val: 4.00 },
   ]
 
   return (
@@ -89,7 +89,7 @@ export default function HomePage() {
         <section className="last-edition-hero">
           <div className="last-edition-eyebrow">
             <span className="dot" />
-            <span className="txt">Última edición con datos</span>
+            <span className="txt">.Última edición con datos</span>
           </div>
           <h1 className="last-edition-title">Picanthon <em>03</em></h1>
           <p className="last-edition-sub">

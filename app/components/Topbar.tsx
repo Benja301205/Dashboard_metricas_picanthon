@@ -49,11 +49,11 @@ export default function Topbar({ active }: { active: string }) {
           </Link>
           <Link
             href="/picanthon/edicion-3"
-            className={`${active === 'ed3' ? 'active ' : ''}pending`}
+            className={active === 'ed3' ? 'active' : ''}
             onClick={close}
           >
             <span className="sn-num">03</span>
-            <span className="sn-lbl">Próximamente</span>
+            <span className="sn-lbl">Argentina 🇦🇷</span>
           </Link>
         </nav>
         <Link href="/" className="sidebar-home" onClick={close}>← Dashboard</Link>

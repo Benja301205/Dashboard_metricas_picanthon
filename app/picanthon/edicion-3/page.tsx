@@ -7,41 +7,35 @@ const ED3 = {
   pais: 'Argentina 🇦🇷',
   ciudad: 'Buenos Aires',
   fecha: '28 de Mayo 2026',
-  total_respuestas: 5,
+  total_respuestas: 10,
   nps: 4.80,
   metricas: [
     { cat: 'Probabilidad de volver (NPS)',       promedio: 4.80 },
-    { cat: 'Calidad de mentores',                 promedio: 5.00 },
+    { cat: 'Calidad de mentores',                 promedio: 4.90 },
     { cat: 'Calidad de la comida',                promedio: 4.40 },
     { cat: 'Decisión de los jueces',              promedio: 4.40 },
-    { cat: 'Calidad del lugar',                   promedio: 4.00 },
-    { cat: 'Dinámica de la presentación',         promedio: 3.80 },
-    { cat: 'Consigna y output esperado',          promedio: 3.60 },
+    { cat: 'Calidad del lugar',                   promedio: 4.20 },
+    { cat: 'Dinámica de la presentación',         promedio: 3.90 },
+    { cat: 'Consigna y output esperado',          promedio: 4.00 },
   ],
   pain_points: [
     {
       cat: 'Tiempo de presentación',
-      menciones: 2,
-      problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Mencionado por 2 de 5 participantes en «¿Qué cambiarías?».',
+      menciones: 3,
+      problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Mencionado por 3 de 10 participantes en «¿Qué cambiarías?».',
       quote: 'Cortísimo el tiempo para presentar, no llegamos a mostrar ni la mitad de lo que teníamos y eso que fuimos rápido.',
+    },
+    {
+      cat: 'Lugar e infraestructura',
+      menciones: 3,
+      problema: 'El espacio resultó incómodo para varios participantes: falta de tomacorrientes y asientos adecuados para trabajar durante horas.',
+      quote: 'Nos quedamos sin buen lugar para sentarnos, faltaba una mesita y un par de enchufes. Pero nada grave, después movimos la mesa y solucionamos fácil.',
     },
     {
       cat: 'Criterios del jurado',
       menciones: 1,
       problema: 'Falta de claridad sobre qué dimensiones prioriza el jurado. Surgió en «¿Qué mantendrías?»: el formato sin producto rentable se valora, pero se pide más transparencia en los criterios.',
       quote: 'Estaría bueno que quede claro desde un principio a qué se le va a dar más peso en la evaluación del jurado.',
-    },
-    {
-      cat: 'Lugar e infraestructura',
-      menciones: 1,
-      problema: 'El espacio resultó incómodo por falta de tomacorrientes disponibles para trabajar con laptops durante horas.',
-      quote: 'Era un poco incómodo el lugar, no habían enchufes.',
-    },
-    {
-      cat: 'Consigna',
-      menciones: 2,
-      problema: 'Dimensión más baja del evento (3.60/5). Dos participantes calificaron con 3/5. Sin comentarios textuales en «¿Qué cambiarías?».',
-      quote: null,
     },
   ],
   sugerencias: [
@@ -50,16 +44,24 @@ const ED3 = {
       texto: 'Que los jueces tengan tiempo para hacer preguntas cortas a los participantes. Tampoco tantas porque sino se hace larga.',
     },
     {
-      cat: 'After',
+      cat: 'After · 2 menciones',
       texto: 'Un after post evaluación y premios para consolidar el networking. Lo más lindo de las hackathones es la gente que uno conoce.',
+    },
+    {
+      cat: 'Consigna sorpresa · 2 menciones',
+      texto: 'Que la consigna sea sorpresa y se revele en el momento, sin anticipar qué hay que construir.',
+    },
+    {
+      cat: 'Votación participantes',
+      texto: 'Alguna votación interna entre los participantes, o categorías separadas en los ganadores.',
+    },
+    {
+      cat: 'Merch · 2 menciones',
+      texto: 'Merch de Picante para todos los participantes, no solo los ganadores. Con un llavero o algo con el logo sería suficiente.',
     },
     {
       cat: 'Formato',
       texto: 'Una edición más larga con foco en producto real, como en ediciones anteriores.',
-    },
-    {
-      cat: 'Reconocimiento',
-      texto: 'Merchandising para todos los participantes, no solo los ganadores. No hace falta algo wow, con un llavero sería suficiente.',
     },
   ],
   quotes: [
@@ -68,8 +70,8 @@ const ED3 = {
       texto: 'Los mentores eran todos unos cracks y que sea un espacio reducido permitía hablar muy bien con todos y no solo hablar de la idea sino conocerse.',
     },
     {
-      cat: 'Dinámica',
-      texto: 'Con mi dupla la pasamos genial, la idea, la temática y toda la buena onda en general estuvo.',
+      cat: 'Consigna',
+      texto: 'La consigna de correrse de algo vendible y hacer algo divertido gracioso y creativo fue lo mejor lejos! Y el nivel de los proyectos con tan poco tiempo.',
     },
     {
       cat: 'Formato',
