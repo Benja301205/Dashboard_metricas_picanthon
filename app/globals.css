@@ -915,6 +915,47 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   border-left: 1px solid var(--line-strong);
 }
 
+/* ============ SUGERENCIAS ============ */
+.sugerencias {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+@media (max-width: 880px) {
+  .sugerencias { grid-template-columns: 1fr; }
+}
+
+.sugerencia {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sugerencias .sugerencia:nth-child(odd) { padding-right: 40px; }
+.sugerencias .sugerencia:nth-child(even) { padding-left: 40px; border-left: 1px solid var(--line); }
+
+@media (max-width: 880px) {
+  .sugerencias .sugerencia:nth-child(odd) { padding-right: 0; }
+  .sugerencias .sugerencia:nth-child(even) { padding-left: 0; border-left: none; }
+}
+
+.sugerencia .sug-cat {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ember);
+}
+
+.sugerencia .sug-text {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+}
+
 /* ============ QUOTES ============ */
 .quotes {
   display: grid;

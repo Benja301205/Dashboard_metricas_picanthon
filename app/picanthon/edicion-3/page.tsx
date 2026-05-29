@@ -17,56 +17,71 @@ const ED3 = {
     { cat: 'Calidad del lugar',                   promedio: 4.00 },
     { cat: 'Dinámica de la presentación',         promedio: 3.80 },
     { cat: 'Consigna y output esperado',          promedio: 3.60 },
-    // ⚠ Sin MiniGames en esta edición
   ],
   pain_points: [
     {
       cat: 'Tiempo de presentación',
       menciones: 2,
-      problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Genera frustración directa en la evaluación y sensación de injusticia.',
-      quote: 'No llegamos a mostrar ni la mitad de lo que teníamos. Minuto y medio fue poco para presentar bien la idea.',
+      problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Mencionado por 2 de 5 participantes en «¿Qué cambiarías?».',
+      quote: 'Cortísimo el tiempo para presentar, no llegamos a mostrar ni la mitad de lo que teníamos y eso que fuimos rápido.',
     },
     {
-      cat: 'Criterios de evaluación',
+      cat: 'Criterios del jurado',
       menciones: 1,
-      problema: 'Falta de transparencia en los parámetros del jurado. Los participantes no sabían qué dimensiones se priorizaban al momento de trabajar.',
+      problema: 'Falta de claridad sobre qué dimensiones prioriza el jurado. Surgió en «¿Qué mantendrías?»: el formato sin producto rentable se valora, pero se pide más transparencia en los criterios.',
       quote: 'Estaría bueno que quede claro desde un principio a qué se le va a dar más peso en la evaluación del jurado.',
     },
     {
-      cat: 'Lugar y enchufes',
-      menciones: 2,
-      problema: 'El espacio fue percibido como incómodo por algunos participantes, principalmente por la falta de tomacorrientes disponibles para trabajar con laptops durante horas.',
-      quote: null,
-    },
-    {
-      cat: 'After / networking',
+      cat: 'Lugar e infraestructura',
       menciones: 1,
-      problema: 'Ausencia de instancia post-evento para consolidar vínculos. La energía generada durante el hackathon no tiene un cierre social.',
-      quote: 'Lo más lindo de las hackathones es la gente que uno conoce.',
+      problema: 'El espacio resultó incómodo por falta de tomacorrientes disponibles para trabajar con laptops durante horas.',
+      quote: 'Era un poco incómodo el lugar, no habían enchufes.',
     },
     {
       cat: 'Consigna',
       menciones: 2,
-      problema: 'La dimensión más baja del evento (3.60/5). Posible ambigüedad o falta de claridad en la consigna antes del inicio.',
+      problema: 'Dimensión más baja del evento (3.60/5). Dos participantes calificaron con 3/5. Sin comentarios textuales en «¿Qué cambiarías?».',
       quote: null,
+    },
+  ],
+  sugerencias: [
+    {
+      cat: 'Jueces',
+      texto: 'Que los jueces tengan tiempo para hacer preguntas cortas a los participantes. Tampoco tantas porque sino se hace larga.',
+    },
+    {
+      cat: 'After',
+      texto: 'Un after post evaluación y premios para consolidar el networking. Lo más lindo de las hackathones es la gente que uno conoce.',
+    },
+    {
+      cat: 'Formato',
+      texto: 'Una edición más larga con foco en producto real, como en ediciones anteriores.',
+    },
+    {
+      cat: 'Reconocimiento',
+      texto: 'Merchandising para todos los participantes, no solo los ganadores. No hace falta algo wow, con un llavero sería suficiente.',
     },
   ],
   quotes: [
     {
       cat: 'Mentores',
-      texto: 'El espacio reducido permitía hablar muy bien con todos y no solo hablar de la idea sino conocerse.',
+      texto: 'Los mentores eran todos unos cracks y que sea un espacio reducido permitía hablar muy bien con todos y no solo hablar de la idea sino conocerse.',
     },
     {
-      cat: 'Presentación',
-      texto: 'No llegamos a mostrar ni la mitad de lo que teníamos. Minuto y medio fue poco para presentar bien la idea.',
+      cat: 'Dinámica',
+      texto: 'Con mi dupla la pasamos genial, la idea, la temática y toda la buena onda en general estuvo.',
+    },
+    {
+      cat: 'Formato',
+      texto: 'Estuvo bueno que fue corta y la temática era muy puntual.',
+    },
+    {
+      cat: 'Formato',
+      texto: 'Mantendría el formato de no esperar que se presente un producto rentable.',
     },
     {
       cat: 'Ambiente',
-      texto: 'Muy buena onda todos. La pasamos muy bien — muy piolas los pibes de Picante.',
-    },
-    {
-      cat: 'Networking',
-      texto: 'Lo más lindo de las hackathones es la gente que uno conoce.',
+      texto: 'El ambiente que generó la gente, muy buena onda todos, la pasamos muy bien la verdad.',
     },
   ],
 }
@@ -127,7 +142,7 @@ export default function Edicion3Page() {
 
         <div className="section-head">
           <h2>Pain <em>points</em></h2>
-          <span className="num">{ED3.pain_points.filter(p => p.quote).length} críticos · {ED3.pain_points.filter(p => !p.quote).length} secundarios</span>
+          <span className="num">{ED3.pain_points.filter(p => p.quote).length} con cita · {ED3.pain_points.filter(p => !p.quote).length} por score</span>
         </div>
         <div className="pain-grid">
           {ED3.pain_points.map((p) => (
@@ -137,19 +152,32 @@ export default function Edicion3Page() {
                 <span className="pain-cnt">{p.menciones} menciones</span>
               </div>
               <p className="pain-text">{p.problema}</p>
-              {p.quote && <p className="pain-quote">“{p.quote}”</p>}
+              {p.quote && <p className="pain-quote">&ldquo;{p.quote}&rdquo;</p>}
+            </div>
+          ))}
+        </div>
+
+        <div className="section-head">
+          <h2>Sugerencias <em>de participantes</em></h2>
+          <span className="num">{ED3.sugerencias.length} propuestas · Q11</span>
+        </div>
+        <div className="sugerencias">
+          {ED3.sugerencias.map((s, i) => (
+            <div key={i} className="sugerencia">
+              <span className="sug-cat">{s.cat}</span>
+              <p className="sug-text">{s.texto}</p>
             </div>
           ))}
         </div>
 
         <div className="section-head">
           <h2>Comentarios <em>destacados</em></h2>
-          <span className="num">{ED3.quotes.length} seleccionados</span>
+          <span className="num">{ED3.quotes.length} seleccionados · Q9</span>
         </div>
         <div className="quotes">
           {ED3.quotes.map((q, i) => (
             <div key={i} className="quote">
-              <span className="mark" aria-hidden>“</span>
+              <span className="mark" aria-hidden>&ldquo;</span>
               <p className="q-cat">{q.cat}</p>
               <p className="q-text">{q.texto}</p>
             </div>
