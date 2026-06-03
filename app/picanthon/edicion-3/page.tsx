@@ -7,35 +7,35 @@ const ED3 = {
   pais: 'Argentina 🇦🇷',
   ciudad: 'Buenos Aires',
   fecha: '28 de Mayo 2026',
-  total_respuestas: 10,
-  nps: 4.80,
+  total_respuestas: 12,
+  nps: 4.75,
   metricas: [
-    { cat: 'Probabilidad de volver (NPS)',       promedio: 4.80 },
-    { cat: 'Calidad de mentores',                 promedio: 4.90 },
-    { cat: 'Calidad de la comida',                promedio: 4.40 },
-    { cat: 'Decisión de los jueces',              promedio: 4.40 },
-    { cat: 'Calidad del lugar',                   promedio: 4.20 },
-    { cat: 'Dinámica de la presentación',         promedio: 3.90 },
-    { cat: 'Consigna y output esperado',          promedio: 4.00 },
+    { cat: 'Probabilidad de volver (NPS)',   promedio: 4.75 },
+    { cat: 'Calidad de mentores',             promedio: 4.83 },
+    { cat: 'Calidad de la comida',            promedio: 4.42 },
+    { cat: 'Decisión de los jueces',          promedio: 4.17 },
+    { cat: 'Calidad del lugar',               promedio: 4.25 },
+    { cat: 'Consigna y output esperado',      promedio: 4.00 },
+    { cat: 'Dinámica de la presentación',     promedio: 3.67 },
   ],
   pain_points: [
     {
       cat: 'Tiempo de presentación',
       menciones: 3,
-      problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Mencionado por 3 de 10 participantes en «¿Qué cambiarías?».',
+      problema: 'El límite de 1 minuto 30 segundos fue percibido como insuficiente para comunicar el trabajo del día. Mencionado por 3 participantes en «¿Qué cambiarías?» — y refleja la métrica más baja del evento (3.67/5).',
       quote: 'Cortísimo el tiempo para presentar, no llegamos a mostrar ni la mitad de lo que teníamos y eso que fuimos rápido.',
+    },
+    {
+      cat: 'Criterios del jurado',
+      menciones: 2,
+      problema: 'Falta de claridad sobre los parámetros de evaluación. Dos participantes lo mencionaron: uno quiere saber el peso de cada criterio desde el inicio, otro pide que la métrica de corrección quede más clara.',
+      quote: 'Dejaría más clara la métrica de corrección de los jueces.',
     },
     {
       cat: 'Lugar e infraestructura',
       menciones: 3,
       problema: 'El espacio resultó incómodo para varios participantes: falta de tomacorrientes y asientos adecuados para trabajar durante horas.',
       quote: 'Nos quedamos sin buen lugar para sentarnos, faltaba una mesita y un par de enchufes. Pero nada grave, después movimos la mesa y solucionamos fácil.',
-    },
-    {
-      cat: 'Criterios del jurado',
-      menciones: 1,
-      problema: 'Falta de claridad sobre qué dimensiones prioriza el jurado. Surgió en «¿Qué mantendrías?»: el formato sin producto rentable se valora, pero se pide más transparencia en los criterios.',
-      quote: 'Estaría bueno que quede claro desde un principio a qué se le va a dar más peso en la evaluación del jurado.',
     },
   ],
   sugerencias: [
@@ -74,8 +74,8 @@ const ED3 = {
       texto: 'La consigna de correrse de algo vendible y hacer algo divertido gracioso y creativo fue lo mejor lejos! Y el nivel de los proyectos con tan poco tiempo.',
     },
     {
-      cat: 'Formato',
-      texto: 'Estuvo bueno que fue corta y la temática era muy puntual.',
+      cat: 'Primera vez',
+      texto: 'Fue mi primer hackathon, y la verdad quedé impresionado, muy buena la dinámica.',
     },
     {
       cat: 'Formato',
@@ -144,7 +144,7 @@ export default function Edicion3Page() {
 
         <div className="section-head">
           <h2>Pain <em>points</em></h2>
-          <span className="num">{ED3.pain_points.filter(p => p.quote).length} con cita · {ED3.pain_points.filter(p => !p.quote).length} por score</span>
+          <span className="num">{ED3.pain_points.length} identificados</span>
         </div>
         <div className="pain-grid">
           {ED3.pain_points.map((p) => (
