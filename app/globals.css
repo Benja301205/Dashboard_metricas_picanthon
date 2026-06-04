@@ -19,6 +19,14 @@
   --font-condensed: "Bebas Neue", "Oswald", sans-serif;
 }
 
+/* ============ TRAMA THEME ============ */
+.trama-theme {
+  --hot: #F04E23;
+  --hot-2: #F07545;
+  --hot-deep: #C33515;
+  --ember: #FFA870;
+}
+
 /* ============ BASE ============ */
 *, *::before, *::after {
   box-sizing: border-box;
